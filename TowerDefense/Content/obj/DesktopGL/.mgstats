@@ -1,0 +1,4 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/Johna/Current Classes/Cs 5410/Tower Defense/TowerDefense/Content/Fonts/menu.spritefont","C:/Users/Johna/Current Classes/Cs 5410/Tower Defense/TowerDefense/Content/bin/DesktopGL/Fonts/menu.xnb","FontDescriptionProcessor","SpriteFontContent",2084,136226,0.2324059
+"C:/Users/Johna/Current Classes/Cs 5410/Tower Defense/TowerDefense/Content/Fonts/menu-select.spritefont","C:/Users/Johna/Current Classes/Cs 5410/Tower Defense/TowerDefense/Content/bin/DesktopGL/Fonts/menu-select.xnb","FontDescriptionProcessor","SpriteFontContent",2176,136226,0.0208151
+"C:/Users/Johna/Current Classes/Cs 5410/Tower Defense/TowerDefense/Content/Sprites/SquareSprite.png","C:/Users/Johna/Current Classes/Cs 5410/Tower Defense/TowerDefense/Content/bin/DesktopGL/Sprites/SquareSprite.xnb","TextureProcessor","Texture2DContent",156,10085,0.0223412
