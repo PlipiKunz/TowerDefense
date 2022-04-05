@@ -5,13 +5,19 @@ namespace Components
 {
     public class Position : Component
     {
-        public List<Point> segments = new List<Point>();
-        public int x { get { return segments[0].X; } }
-        public int y { get { return segments[0].Y; } }
+        
+        public int x;
+        public int y;
+        public int w;
+        public int h;
+        public Rectangle r { get { return new Rectangle(x,y,w,h); } }
 
-        public Position(int x, int y)
+        public Position(int x, int y, int w = 1, int h = 1)
         {
-            segments.Add(new Point(x, y));
+            this.x = x; 
+            this.y = y;
+            this.w = w;
+            this.h = h;
         }
     }
 }

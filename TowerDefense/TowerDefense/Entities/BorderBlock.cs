@@ -9,7 +9,7 @@ namespace Entities
         {
             var border = new Entity();
 
-            border.Add(new Components.Appearance(square, Color.Red, Color.Black));
+            border.Add(new Components.Sprite(square, Color.Red, Color.Black));
             border.Add(new Components.Position(x, y));
             border.Add(new Components.Collision());
 

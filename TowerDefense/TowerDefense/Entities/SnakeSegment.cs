@@ -12,8 +12,8 @@ namespace Entities
         {
             var snake = new Entity();
 
-            snake.Add(new Components.Appearance(square, Color.White, Color.Black));
-            snake.Add(new Components.Position(x, y));
+            snake.Add(new Components.Sprite(square, Color.White, Color.Black));
+            snake.Add(new Components.Position(x, y, 3, 5));
             snake.Add(new Components.Collision());
             snake.Add(new Components.Movable(Components.Direction.Stopped, MOVE_INTERVAL));
             snake.Add(new Components.KeyboardControlled(

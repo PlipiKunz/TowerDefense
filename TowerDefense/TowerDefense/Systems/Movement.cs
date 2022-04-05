@@ -55,25 +55,11 @@ namespace Systems
             var movable = entity.GetComponent<Components.Movable>();
             var position = entity.GetComponent<Components.Position>();
 
-            //
-            // Remember current front position, so it can be added back in as the move
-            var front = position.segments[0];
-
-            //
-            // Remove the tail, but only if there aren't new segments to add
-            if (movable.segmentsToAdd == 0 && position.segments.Count > 0)
-            {
-                position.segments.RemoveAt(position.segments.Count - 1);
-            }
-            else
-            {
-                movable.segmentsToAdd--;
-            }
 
             //
             // Update the front of the entity with the segment moving into the new spot
-            Point newFront = new Point(front.X + xIncrement, front.Y + yIncrement);
-            position.segments.Insert(0, newFront);
+            position.x += xIncrement;
+            position.y += yIncrement;
         }
     }
 }

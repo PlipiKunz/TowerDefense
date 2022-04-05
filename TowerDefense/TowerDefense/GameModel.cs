@@ -12,7 +12,7 @@ namespace CS5410.TowerDefenseGame
         public int score;
         public bool isDone;
 
-        private const int GRID_SIZE = 50;
+        private const int GRID_SIZE = 100;
         private const int OBSTACLE_COUNT = 15;
         private readonly int WINDOW_WIDTH;
         private readonly int WINDOW_HEIGHT;
@@ -33,6 +33,9 @@ namespace CS5410.TowerDefenseGame
 
         public void initialize(ContentManager content, SpriteBatch spriteBatch)
         {
+            isDone = false;
+            score = 0;
+
             var texSquare = content.Load<Texture2D>("Sprites/SquareSprite");
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, texSquare, WINDOW_WIDTH, WINDOW_HEIGHT, GRID_SIZE);

@@ -39,7 +39,6 @@ namespace Systems
                         // If food, that's okay
                         if (entity.ContainsComponent<Components.Food>())
                         {
-                            entityMovable.GetComponent<Components.Movable>().segmentsToAdd = 3;
                             m_foodConsumed(entity);
                         }
                         else
@@ -65,12 +64,9 @@ namespace Systems
                 {
                     var ePosition = entity.GetComponent<Components.Position>();
 
-                    foreach (var segment in ePosition.segments)
+                    if (aPosition.r.Intersects(ePosition.r))
                     {
-                        if (aPosition.x == segment.X && aPosition.y == segment.Y)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -95,35 +91,20 @@ namespace Systems
 
             return movable;
         }
-        /// <summary>
-        /// We know that only the snake is moving and that we only need
-        /// to check its head for collision with other entities.  Therefore,
-        /// don't need to look at all the segments in the position, with the
-        /// exception of the movable itself...a movable can collide with itself.
-        /// </summary>
+
         private bool collides(Entity a, Entity b)
         {
             var aPosition = a.GetComponent<Components.Position>();
             var bPosition = b.GetComponent<Components.Position>();
-
+            
             //
-            // A movable can collide with itself: Check segment against the rest
+            // A movable cannot collide with itself
             if (a == b)
             {
-                //
-                // Have to skip the first segment, that's why using a counted for loop
-                for (int segment = 1; segment < aPosition.segments.Count; segment++)
-                {
-                    if (aPosition.x == aPosition.segments[segment].X && aPosition.y == aPosition.segments[segment].Y)
-                    {
-                        return true;
-                    }
-                }
-
                 return false;
             }
 
-            return aPosition.x == bPosition.x && aPosition.y == bPosition.y;
+            return aPosition.r.Intersects(bPosition.r) ;
         }
     }
 }

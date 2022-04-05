@@ -9,7 +9,7 @@ namespace Entities
         {
             var obstacle = new Entity();
 
-            obstacle.Add(new Components.Appearance(square, new Color(0, 255, 0), Color.Black));
+            obstacle.Add(new Components.Sprite(square, new Color(0, 255, 0), Color.Black));
             obstacle.Add(new Components.Position(x, y));
             obstacle.Add(new Components.Collision());
 
