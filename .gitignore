@@ -1,0 +1,11 @@
+
+/[Oo]bj/
+/[Bb]in/
+
+# Windows shortcuts
+*.lnk
+
+# Visual Studio stuff
+.vs/
+.idea/
+.gradle/
