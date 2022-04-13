@@ -6,18 +6,29 @@ namespace Components
     public class Position : Component
     {
         
-        public int x;
-        public int y;
-        public int w;
-        public int h;
-        public Rectangle r { get { return new Rectangle(x,y,w,h); } }
+        public float x;
+        public float y;
+        public float w;
+        public float h;
 
-        public Position(int x, int y, int w = 1, int h = 1)
+        public Position(float x, float y, float w = 1, float h = 1)
         {
             this.x = x; 
             this.y = y;
             this.w = w;
             this.h = h;
+        }
+
+        public void fixBounds() {
+
+            if (x + w > Systems.CoordinateSystem.GRID_SIZE)
+            {
+                x = Systems.CoordinateSystem.GRID_SIZE - w;
+            }
+            if (y + h > Systems.CoordinateSystem.GRID_SIZE)
+            {
+                y = Systems.CoordinateSystem.GRID_SIZE - h;
+            }       
         }
     }
 }

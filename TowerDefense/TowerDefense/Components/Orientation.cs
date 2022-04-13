@@ -10,7 +10,7 @@ namespace Components
             set { degrees = value * (float)(180 / Math.PI); } 
         }
 
-        public Orientation(float  degrees)
+        public Orientation(float  degrees = 90)
         {
             this.degrees = degrees;
         }

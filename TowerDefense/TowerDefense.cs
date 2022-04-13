@@ -24,7 +24,6 @@ namespace CS5410
         {
             m_graphics.PreferredBackBufferWidth = 1920;
             m_graphics.PreferredBackBufferHeight = 1080;
-            
 
             m_graphics.ApplyChanges();
 
@@ -37,7 +36,6 @@ namespace CS5410
             m_states.Add(GameStateEnum.Credits, new CreditsView());
             m_states.Add(GameStateEnum.EndGameConfirm, new EndGameConfirmView());
             m_states.Add(GameStateEnum.GameFinished, new GameFinishedView());
-
 
             // We are starting with the main menu
             m_currentState = m_states[GameStateEnum.MainMenu];
@@ -80,8 +78,16 @@ namespace CS5410
 
             if (m_currentState != m_states[m_nextStateEnum])
             {
-                m_currentState = m_states[m_nextStateEnum];
-                m_currentState.initializeSession();
+                //if were resuming from pause menu dont reset
+                if (!(m_currentState == m_states[GameStateEnum.EndGameConfirm] && m_nextStateEnum == GameStateEnum.GamePlay))
+                {
+                    m_currentState = m_states[m_nextStateEnum];
+                    m_currentState.initializeSession();
+                }
+                else {
+
+                    m_currentState = m_states[m_nextStateEnum];
+                }
             }
 
             base.Draw(gameTime);

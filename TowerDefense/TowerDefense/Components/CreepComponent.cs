@@ -5,11 +5,10 @@ using Systems;
 
 namespace Components
 {
-    class Selectable : Component
+    class CreepComponent : Component
     {
-        public Selectable()
+        public CreepComponent()
         {
         }
-
     }
 }

@@ -8,15 +8,15 @@ namespace Components
         Both
     }
 
-    public class Tower : Component
+    public class TowerComponent : Component
     {
         public uint range;
         public uint level;
         public TargetType type;
-        public uint fireInterval { get; private set; }
+        public uint fireInterval { get; set; }
         public uint elapsedInterval = 0;
 
-        public Tower(uint range,  uint moveInterval, TargetType type)
+        public TowerComponent(uint range,  uint moveInterval, TargetType type)
         {
             this.range = range;
             this.fireInterval = moveInterval;

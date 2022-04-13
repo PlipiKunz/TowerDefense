@@ -5,23 +5,16 @@ using System;
 namespace Systems
 {
 
-    public enum KeyboardActions
-    {
-        Upgrade,
-        Sell,
-        Next
-    }
-
     /// <summary>
     /// This system knows how to accept keyboard input and use that
     /// to move an entity, based on the entities 'KeyboardControlled'
     /// component settings.
     /// </summary>
-    class KeyboardInput : System
+    class TowerSystem : System
     {
 
-        public KeyboardInput()
-            : base(typeof(Components.KeyboardControlled))
+        public TowerSystem()
+            : base(typeof(Components.TowerComponent))
         {
         }
 

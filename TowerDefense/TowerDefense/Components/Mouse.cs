@@ -5,11 +5,10 @@ using Systems;
 
 namespace Components
 {
-    class Selectable : Component
+    class Mouse : Component
     {
-        public Selectable()
+        public Mouse()
         {
         }
-
     }
 }
