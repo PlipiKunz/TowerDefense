@@ -12,7 +12,8 @@ namespace Components
     {
         public uint range;
         public uint level;
-        public TargetType type;
+        public TargetType targetType;
+        public Entities.Entity target;
         public uint fireInterval { get; set; }
         public uint elapsedInterval = 0;
 
@@ -20,8 +21,10 @@ namespace Components
         {
             this.range = range;
             this.fireInterval = moveInterval;
-            this.type = type;
+            this.targetType = type;
             this.level = 0;
+
+            this.target = null;
         }
     }
 }

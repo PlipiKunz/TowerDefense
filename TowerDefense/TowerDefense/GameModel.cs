@@ -24,6 +24,7 @@ namespace CS5410.TowerDefenseGame
         private Systems.MouseHandeler m_sysMouseHandeler;
         private Systems.CreepMovement m_sysCreepMovement;
         private Systems.KeyboardInput m_sysKeyboardInput;
+        private Systems.TowerSystem m_towerSystem;
 
         public GameModel(int width, int height)
         {
@@ -37,17 +38,21 @@ namespace CS5410.TowerDefenseGame
             score = 0;
 
             var texSquare = content.Load<Texture2D>("Sprites/SquareSprite");
-            m_coordinateSystem = new Systems.CoordinateSystem(WINDOW_WIDTH, WINDOW_HEIGHT, GRID_SIZE);
+            var towerSquare = content.Load<Texture2D>("Sprites/TowerSprite");
+
+            Systems.CoordinateSystem.reset();
+            m_coordinateSystem = Systems.CoordinateSystem.Instance();
+            m_coordinateSystem.initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GRID_SIZE);
+
+            Systems.CreepMovement.reset();
+            m_sysCreepMovement = Systems.CreepMovement.Instance();
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, texSquare);
             m_sysMouseHandeler = new Systems.MouseHandeler();
-
-            m_sysCreepMovement = Systems.CreepMovement.Instance();
-            Systems.CreepMovement.reset();
-
+            m_towerSystem = new Systems.TowerSystem();
             m_sysKeyboardInput = new Systems.KeyboardInput();
 
-            init(texSquare);
+            init(texSquare, towerSquare);
         }
 
         public void update(GameTime gameTime)
@@ -56,6 +61,7 @@ namespace CS5410.TowerDefenseGame
             m_sysKeyboardInput.Update(gameTime);
             m_sysCreepMovement.Update(gameTime);
             m_sysMouseHandeler.Update(gameTime);
+            m_towerSystem.Update(gameTime);
 
             foreach (var entity in m_removeThese)
             {
@@ -77,36 +83,37 @@ namespace CS5410.TowerDefenseGame
 
         private void AddEntity(Entity entity)
         {
+            m_coordinateSystem.Add(entity);
             m_sysKeyboardInput.Add(entity);
             m_sysCreepMovement.Add(entity);
             m_sysMouseHandeler.Add(entity);
             m_sysRenderer.Add(entity);
+            m_towerSystem.Add(entity);
         }
 
         private void RemoveEntity(Entity entity)
         {
+            m_coordinateSystem.Remove(entity.Id);
             m_sysKeyboardInput.Remove(entity.Id);
             m_sysCreepMovement.Remove(entity.Id);
             m_sysMouseHandeler.Remove(entity.Id);
             m_sysRenderer.Remove(entity.Id);
+            m_towerSystem.Remove(entity.Id);
         }
 
-        private void init(Texture2D square)
+        private void init(Texture2D square, Texture2D towerSquare)
         {
             var mouse = MouseEntity.create(square, 4, 4);
             AddEntity(mouse);
 
-
-            var tower = SimpleTower.create(square, 8, 9);
+            var tower = SimpleTower.create(towerSquare, 2, 2);
             AddEntity(tower);
-             tower = SimpleTower.create(square, 7, 9);
+             tower = SimpleTower.create(towerSquare, 4, 4);
             AddEntity(tower);
-             tower = SimpleTower.create(square, 9, 7);
+             tower = SimpleTower.create(towerSquare, 9, 6);
             AddEntity(tower);
-             tower = SimpleTower.create(square, 8, 7);
+             tower = SimpleTower.create(towerSquare, 8, 7);
             AddEntity(tower);
-
-
 
             var creep = SimpleCreep.create(square, 0, 0, new Vector2(9,9) );
             AddEntity(creep);

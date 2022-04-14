@@ -28,7 +28,7 @@ namespace Systems
         public static void reset() {
             lock (lockObj)
             {
-                instance = null;
+                instance =  new CreepMovement();
             }
         }
 
@@ -36,7 +36,7 @@ namespace Systems
         private int[,] gridMap = null;
         public bool upToDate = false;
 
-        public CreepMovement() : base()
+        protected CreepMovement() : base()
         {
             gridMap = new int[CoordinateSystem.GRID_SIZE, CoordinateSystem.GRID_SIZE];
             mapSetup();
@@ -49,7 +49,7 @@ namespace Systems
                 upToDate = true;
             }
 
-            var creeps = CoordinateSystem.findCreeps(m_entities);
+            var creeps = CoordinateSystem.Instance().findCreeps();
             orientationSet(gameTime, creeps);
             move(gameTime, creeps);
         }
@@ -76,7 +76,8 @@ namespace Systems
                         {
                             movable.path.RemoveAt(0);
                             nextPoint = movable.path[0];
-                            orientation.radians = (float)Math.Atan2(nextPoint.Y + .5 - (position.h/2)  - position.y, nextPoint.X +.5 - (position.w / 2) - position.x);
+
+                            orientation.radians = CoordinateSystem.angle(new Vector2(position.CenterX, position.centerY), new Vector2(nextPoint.X + .5f, nextPoint.Y + .5f));
                         }
 
                     }
@@ -121,7 +122,7 @@ namespace Systems
         {
             clearMap();
 
-            var towers = CoordinateSystem.findTowers(m_entities);
+            var towers = CoordinateSystem.Instance().findTowers();
             mapAddTowers(towers);
             creepPathSet();
         }
@@ -134,7 +135,7 @@ namespace Systems
         {
             int[,] before = gridMap;
 
-            var towers = CoordinateSystem.findTowers(m_entities);
+            var towers = CoordinateSystem.Instance().findTowers();
             towers.Add(proposed);
 
             clearMap();
@@ -184,7 +185,7 @@ namespace Systems
         private bool creepPathSet()
         {
             //creep path checking
-            var creeps = CoordinateSystem.findCreeps(m_entities);
+            var creeps = CoordinateSystem.Instance().findCreeps();
             foreach (var entity in creeps) {
                 if (!setEntityPath(entity)) {
                     return false;
@@ -252,7 +253,7 @@ namespace Systems
                             continue;
                         }
                         
-                        neighbor = new PathNode(neighborLoc, curNode.movementCost + gridMap[(int)neighborLoc.X, (int)neighborLoc.Y], heuristic(neighborLoc, goal), curNode);
+                        neighbor = new PathNode(neighborLoc, curNode.movementCost + gridMap[(int)neighborLoc.X, (int)neighborLoc.Y], CoordinateSystem.distance(neighborLoc, goal), curNode);
 
                         //if the neighbor is the goal
                         if (neighbor.pos.X == goal.X && neighbor.pos.Y == goal.Y)
@@ -318,12 +319,6 @@ namespace Systems
             }
 
             return neighbors;
-        }
-        /// <summary>
-        /// Various a star algorithm pieces
-        /// </summary>
-        private int heuristic(Vector2 loc, Vector2 goal) {
-            return (int)Math.Sqrt(Math.Pow((loc.X - goal.X), 2) + Math.Pow((loc.Y - goal.Y), 2));
         }
     }
 

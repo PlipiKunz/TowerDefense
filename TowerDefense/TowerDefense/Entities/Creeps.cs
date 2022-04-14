@@ -24,7 +24,7 @@ namespace Entities
             creep.Add(new Components.PathMovable(MOVE_AMOUNT, v));
             creep.Add(new Components.Cost(STANDARD_COST));
             creep.Add(new Components.Health(STANDARD_HEALTH));
-            creep.Add(new Components.CreepComponent());
+            creep.Add(new Components.CreepComponent(Components.TargetType.Ground));
             
             return creep;
         }

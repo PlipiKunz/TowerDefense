@@ -7,8 +7,10 @@ namespace Components
 {
     class CreepComponent : Component
     {
-        public CreepComponent()
+        public TargetType creepType;
+        public CreepComponent(TargetType type)
         {
+            this.creepType = type;
         }
     }
 }

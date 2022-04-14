@@ -1,22 +1,46 @@
 ﻿using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Systems
 {
-    
-
     class CoordinateSystem : System
     {
+        static CoordinateSystem instance;
+        private static object lockObj = new object();
+        public static CoordinateSystem Instance()
+        {
+            if (instance == null)
+            {
+                lock (lockObj)
+                {
+                    instance = new CoordinateSystem();
+                }
+            }
+
+            return instance;
+        }
+        public static void reset()
+        {
+            lock (lockObj)
+            {
+                instance = new CoordinateSystem();
+            }
+        }
+
         public static int GRID_SIZE { get; protected set;}
         public static int CELL_SIZE { get; protected set;}
         public static int OFFSET_X { get; protected set;}
         public static int OFFSET_Y { get; protected set;}
 
-
-        public CoordinateSystem( int screen_width, int screen_height, int gridSize) :
+        protected CoordinateSystem() :
             base()
+        { 
+        }
+
+        public void initialize( int screen_width, int screen_height, int gridSize) 
         {
             GRID_SIZE = gridSize;
             CELL_SIZE = screen_height / gridSize;
@@ -104,11 +128,11 @@ namespace Systems
         /// <summary>
         /// Returns a collection of all the tower entities.
         /// </summary>
-        public static List<Entity> findTowers(Dictionary<uint, Entity> entities)
+        public  List<Entity> findTowers()
         {
             var towers = new List<Entity>();
 
-            foreach (var entity in entities.Values)
+            foreach (var entity in m_entities.Values)
             {
                 if (entity.ContainsComponent<Components.TowerComponent>() && entity.ContainsComponent<Components.Position>())
                 {
@@ -122,11 +146,11 @@ namespace Systems
         /// <summary>
         /// Returns a collection of all the creep entities.
         /// </summary>
-        public static List<Entity> findCreeps(Dictionary<uint, Entity> entities)
+        public  List<Entity> findCreeps()
         {
             var creep = new List<Entity>();
 
-            foreach (var entity in entities.Values)
+            foreach (var entity in m_entities.Values)
             {
                 if (entity.ContainsComponent<Components.CreepComponent>())
                 {
@@ -135,6 +159,15 @@ namespace Systems
             }
 
             return creep;
+        }
+
+        public static int distance(Vector2 pointA, Vector2 pointB)
+        {
+            return (int)Math.Sqrt(Math.Pow((pointA.X - pointB.X), 2) + Math.Pow((pointA.Y - pointB.Y), 2));
+        }
+
+        public static float angle(Vector2 originPoint, Vector2 goalPoint) {
+            return (float)Math.Atan2(goalPoint.Y - originPoint.Y, goalPoint.X - originPoint.X);
         }
     }
 }
