@@ -9,3 +9,5 @@
 .vs/
 .idea/
 .gradle/
+**/[Bb]in
+**/[Oo]bj
