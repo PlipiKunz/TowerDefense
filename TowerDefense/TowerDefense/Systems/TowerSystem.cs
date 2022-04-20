@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using CS5410.TowerDefenseGame;
+using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -11,7 +12,6 @@ namespace Systems
     /// </summary>
     class TowerSystem : System
     {
-
         public TowerSystem()
             : base(typeof(Components.TowerComponent))
         {
@@ -48,8 +48,6 @@ namespace Systems
             }
         }
 
-
-        private const float CLOSE_ENOUGH_ANGLE = 5f;
         private void towerRotateAndFire(GameTime gameTime, List<Entity> towers) {
             foreach (var tower in towers)
             {
@@ -57,53 +55,68 @@ namespace Systems
                 var towerComponent = tower.GetComponent<Components.TowerComponent>();
                 var orientation = tower.GetComponent<Components.Orientation>();
 
+                //updates fire interval timer
+                towerComponent.elapsedInterval += (uint)gameTime.ElapsedGameTime.Milliseconds;
+
+                //if the target creep does exist
                 Entity targetCreep = towerComponent.target;
                 if (targetCreep != null)
                 {
                     var creepPosition = targetCreep.GetComponent<Components.Position>();
-                    float goalAngle = CoordinateSystem.angle(new Vector2(position.CenterX, position.centerY), new Vector2(creepPosition.CenterX, creepPosition.centerY));
+                    orientation.radianGoal = CoordinateSystem.angle(new Vector2(position.CenterX, position.CenterY), new Vector2(creepPosition.CenterX, creepPosition.CenterY));
 
-                    float prevAngle = orientation.radians;
-                    float curAngle = orientation.radians;
-
-
-                    if (Math.Abs(curAngle - goalAngle) > (CLOSE_ENOUGH_ANGLE * (float)(Math.PI / 180)))
+                    bool linedUp = orientation.rotateToGoal(gameTime);
+                    if (linedUp)
                     {
-                        float degreesToMove = orientation.degreeTurnSpeed * gameTime.ElapsedGameTime.Milliseconds;
-
-                        if (crossProduct(curAngle, goalAngle) < 0)
+                        fire(tower);
+                        //resets fire interval timer
+                        if (towerComponent.elapsedInterval > towerComponent.fireInterval)
                         {
-                            degreesToMove *= -1;
+                            towerComponent.elapsedInterval = 0;
                         }
-
-                        curAngle += degreesToMove;
-
-                        if ((crossProduct(curAngle, goalAngle) < 0) != (crossProduct(prevAngle, goalAngle) < 0))
-                        {
-                            curAngle = goalAngle;
-                        }
-
-                        orientation.radians = curAngle;
-                    }
-                    else {
-                        fire();
                     }
                 }
+                else {
+                    orientation.rotate(gameTime);
+                }
 
+                //stop elapsed interval from possibly overflowwing, while not disrupting fire timer
+                if (towerComponent.elapsedInterval > towerComponent.fireInterval*2)
+                {
+                    towerComponent.elapsedInterval = (uint)(towerComponent.fireInterval * 1.5);
+                }
             }
         }
 
-        private void fire() { 
-        
-        }
-        private float crossProduct(float angleA, float angleB)
+        private void fire(Entity tower)
         {
-            Vector2 vA = new Vector2((float)Math.Cos(angleA), (float)Math.Sin(angleA));
-            Vector2 vB = new Vector2((float)Math.Cos(angleB), (float)Math.Sin(angleB));
+            var towerComponent = tower.GetComponent<Components.TowerComponent>();
+            if (towerComponent.elapsedInterval > towerComponent.fireInterval)
+            {
+                var towerPos = tower.GetComponent<Components.Position>();
 
-            return (float)((vA.X * vB.Y) - (vA.Y * vB.X));
+                Entity targetCreep = towerComponent.target;
+                if (targetCreep != null)
+                {
 
+                    Entity bullet;
+                    if (towerComponent.targetType == Components.TargetType.Air)
+                    {
+
+                    }
+                    else if (towerComponent.targetType == Components.TargetType.Ground)
+                    {
+                    }
+                    else
+                    {
+
+                    }
+                    bullet = SimpleBullet.create(towerPos.CenterX, towerPos.CenterY, targetCreep, towerComponent.level);
+                    GameModel.m_addThese.Add(bullet);
+                }
+            }
         }
+        
 
     }
 }

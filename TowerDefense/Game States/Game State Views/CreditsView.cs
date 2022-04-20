@@ -8,7 +8,7 @@ namespace CS5410
     public class CreditsView : GameStateView
     {
         private SpriteFont m_font;
-        private const string MESSAGE = "Developed by Johnathan Kunz\nSome Code Adapted From Dean Mathias\n'Explosion, 8-bit, 01.wav' by InspectorJ (www.jshaw.co.uk) of Freesound.org";
+        private const string MESSAGE = "Developed by Johnathan Kunz\nSome Code Adapted From Dean Mathias";
 
         public override void loadContent(ContentManager contentManager)
         {

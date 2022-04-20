@@ -10,7 +10,7 @@ namespace Components
         public Color stroke;
         public float priority;
         public bool rotatable;
-        public Sprite(Texture2D image, Color fill, Color stroke, float priority = 0, bool rotatable = false)
+        public Sprite(Texture2D image, Color fill, Color stroke, float priority = .5f, bool rotatable = false)
         {
             this.image = image;
             this.fill = fill;

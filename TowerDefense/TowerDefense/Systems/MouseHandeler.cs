@@ -1,8 +1,11 @@
 ﻿using Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+
+using System.Windows.Input;
 
 namespace Systems
 {
@@ -24,7 +27,11 @@ namespace Systems
             Entity mouse = findMouse(m_entities);
             if (mouse != null)
             {
-                MouseState mouseState = Mouse.GetState();   
+                MouseCursor mouseCursor = MouseCursor.FromTexture2D(Renderer.blank, 0, 0);
+
+                MouseState mouseState = Mouse.GetState();
+                Mouse.SetCursor(mouseCursor);
+
                 updateMousePosition(gameTime,mouse, mouseState);
                 updateMouseClick(gameTime,mouse, mouseState);
             }

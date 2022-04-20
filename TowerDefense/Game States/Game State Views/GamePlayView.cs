@@ -17,7 +17,7 @@ namespace CS5410
         public override void initializeSession()
         {
             m_gameModel = new GameModel(m_graphics.PreferredBackBufferWidth, m_graphics.PreferredBackBufferHeight);
-            m_gameModel.initialize(m_content, m_spriteBatch);
+            m_gameModel.initialize(m_content, m_spriteBatch, m_graphics.GraphicsDevice);
         }
 
         public override void loadContent(ContentManager contentManager)
@@ -44,22 +44,23 @@ namespace CS5410
         public override void update(GameTime gameTime)
         {
             m_gameModel.update(gameTime);
+            ScorePersistence.score = GameModel.score;
         }
 
 
         private GameStateEnum checkIfDone() {
-            /*if (m_gameModel.isDone)
+            if (m_gameModel.isDone)
             {
                 done();
                 return GameStateEnum.GameFinished;
-            }*/
-            
+            }
+
             return GameStateEnum.GamePlay;
         }
 
         public static void done()
         {
-            //ScorePersistence.addScore(m_gameModel.score);
+            ScorePersistence.addScore(GameModel.score);
         }
     }
 }

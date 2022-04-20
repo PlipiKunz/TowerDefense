@@ -75,7 +75,7 @@ namespace CS5410
                 }
                 else
                 {
-                    if (timeSinceBind == 0)
+                    if (timeSinceBind <= 0)
                     {
                         Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
                         if (keysPressed.Length != 0)
@@ -124,7 +124,14 @@ namespace CS5410
             }
             else
             {
-                float bottom = drawSelectedMenuItem("Press a key to bind to the " + curBindingKey + " action", 200, false);
+                if (timeSinceBind <= 0)
+                {
+                    float bottom = drawSelectedMenuItem("Press a key to bind to the " + curBindingKey + " action", 200, false);
+                }
+                else {
+
+                    float bottom = drawSelectedMenuItem("Please wait a few seconds", 200, false);
+                }
             }
 
             m_spriteBatch.End();

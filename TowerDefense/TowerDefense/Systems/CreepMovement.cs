@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿
+using CS5410.TowerDefenseGame;
+using Entities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -50,22 +52,20 @@ namespace Systems
             }
 
             var creeps = CoordinateSystem.Instance().findCreeps();
-            orientationSet(gameTime, creeps);
-            move(gameTime, creeps);
+            rotateAndMove(gameTime, creeps);
         }
 
         /// <summary>
         /// sets next location in creep pathfinding
         /// </summary>
-        private void orientationSet(GameTime gameTime, List<Entity> creeps)
+        private void rotateAndMove(GameTime gameTime, List<Entity> creeps)
         {
             foreach (var entity in creeps)
             {
                 var movable = entity.GetComponent<Components.PathMovable>();
                 var orientation = entity.GetComponent<Components.Orientation>();
                 var position = entity.GetComponent<Components.Position>();
- 
-                
+
                 if (movable.path.Count > 0)
                 {
                     Vector2 nextPoint = movable.path[0];
@@ -77,43 +77,28 @@ namespace Systems
                             movable.path.RemoveAt(0);
                             nextPoint = movable.path[0];
 
-                            orientation.radians = CoordinateSystem.angle(new Vector2(position.CenterX, position.centerY), new Vector2(nextPoint.X + .5f, nextPoint.Y + .5f));
+                            orientation.radianGoal = CoordinateSystem.angle(new Vector2(position.CenterX, position.CenterY), new Vector2(nextPoint.X + .5f, nextPoint.Y + .5f));
                         }
+                    }
+                    else {
+                        if (nextPoint.X == Math.Floor(position.x) && nextPoint.Y == Math.Floor(position.y))
+                        {
+                            var damage = entity.GetComponent<Components.Damage>();
+                            GameModel.health -= (int)damage.damage * 5;
 
+                            GameModel.m_removeThese.Add(entity);
+                        }
                     }
                 }
 
+                orientation.rotateToGoal(gameTime);
+                float curMovmement = movable.moveAmount * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                position.move(new Vector2((float)Math.Cos(orientation.radianGoal), (float)Math.Sin(orientation.radianGoal)), curMovmement);
+
             }
         }
 
-        /// <summary>
-        /// move all creeps
-        /// </summary>
-        private void move(GameTime gameTime, List<Entity> creeps)
-        {
-            foreach (var entity in creeps)
-            {
-                moveEntity(entity, gameTime);
-            }
-        }
 
-        /// <summary>
-        /// moves an entity according to its orientation and movable speed
-        /// </summary>
-        private void moveEntity(Entity entity, GameTime gameTime)
-        {
-            var movable = entity.GetComponent<Components.PathMovable>();
-            var orientation = entity.GetComponent<Components.Orientation>();
-            var position = entity.GetComponent<Components.Position>();
-
-            float curMovmement = movable.moveAmount * (uint)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            Vector2 movementVector = new Vector2((float)Math.Cos(orientation.radians), (float)Math.Sin(orientation.radians));
-            movementVector.Normalize();
-
-            position.x += movementVector.X * curMovmement;
-            position.y += movementVector.Y * curMovmement;
-        }
 
         /// <summary>
         /// complete map setup

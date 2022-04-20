@@ -12,15 +12,17 @@ namespace Components
     {
         public uint range;
         public uint level;
+
         public TargetType targetType;
         public Entities.Entity target;
         public uint fireInterval { get; set; }
-        public uint elapsedInterval = 0;
+        public uint elapsedInterval;
 
-        public TowerComponent(uint range,  uint moveInterval, TargetType type)
+        public TowerComponent(uint range,  uint fireInterval, TargetType type)
         {
             this.range = range;
-            this.fireInterval = moveInterval;
+            this.fireInterval = fireInterval;
+            this.elapsedInterval = (uint)(fireInterval * 1.5);
             this.targetType = type;
             this.level = 0;
 

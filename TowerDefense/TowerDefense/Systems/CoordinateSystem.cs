@@ -30,18 +30,23 @@ namespace Systems
             }
         }
 
-        public static int GRID_SIZE { get; protected set;}
-        public static int CELL_SIZE { get; protected set;}
-        public static int OFFSET_X { get; protected set;}
-        public static int OFFSET_Y { get; protected set;}
+        public static int SWIDTH { get; protected set; }
+        public static int SHEIGHT { get; protected set; }
+        public static int GRID_SIZE { get; protected set; }
+        public static int CELL_SIZE { get; protected set; }
+        public static int OFFSET_X { get; protected set; }
+        public static int OFFSET_Y { get; protected set; }
 
         protected CoordinateSystem() :
             base()
-        { 
+        {
         }
 
-        public void initialize( int screen_width, int screen_height, int gridSize) 
+        public void initialize(int screen_width, int screen_height, int gridSize)
         {
+            SWIDTH = screen_width;
+            SHEIGHT = screen_height;
+
             GRID_SIZE = gridSize;
             CELL_SIZE = screen_height / gridSize;
             OFFSET_X = (screen_width - (gridSize * CELL_SIZE)) / 2;
@@ -102,8 +107,7 @@ namespace Systems
             return true;
         }
 
-
-        public bool collides(Entity a, Entity b)
+        public static bool collides(Entity a, Entity b)
         {
             var aPosition = a.GetComponent<Components.Position>();
             var bPosition = b.GetComponent<Components.Position>();
@@ -121,9 +125,6 @@ namespace Systems
 
             return aRect.Intersects(bRect);
         }
-
-
-
 
         /// <summary>
         /// Returns a collection of all the tower entities.
@@ -169,5 +170,15 @@ namespace Systems
         public static float angle(Vector2 originPoint, Vector2 goalPoint) {
             return (float)Math.Atan2(goalPoint.Y - originPoint.Y, goalPoint.X - originPoint.X);
         }
+
+        public static float crossProduct(float angleA, float angleB)
+        {
+            Vector2 vA = new Vector2((float)Math.Cos(angleA), (float)Math.Sin(angleA));
+            Vector2 vB = new Vector2((float)Math.Cos(angleB), (float)Math.Sin(angleB));
+
+            return (float)((vA.X * vB.Y) - (vA.Y * vB.X));
+
+        }
+
     }
 }

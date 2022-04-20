@@ -14,7 +14,7 @@ namespace Components
         public float CenterX { 
             get { return x + (w / 2); } 
         }
-        public float centerY
+        public float CenterY
         {
             get { return y + (h / 2); }
         }
@@ -36,6 +36,12 @@ namespace Components
             {
                 y = Systems.CoordinateSystem.GRID_SIZE - h;
             }       
+        }
+
+        public void move(Vector2 direction, float force) {
+            direction.Normalize();
+            x += direction.X * force;
+            y += direction.Y * force;
         }
     }
 }
