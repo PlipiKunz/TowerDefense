@@ -19,7 +19,7 @@ namespace Entities
             creepSprite = content.Load<Texture2D>("Sprites/SquareSprite");
         }
 
-        public static Entity create(int x, int y, Vector2 v)
+        public static Entity createSimpleGround(int x, int y, Vector2 v)
         {
             var creep = new Entity();
 
@@ -34,6 +34,24 @@ namespace Entities
             creep.Add(new Components.Damage(STANDARD_DAMAGE));
             creep.Add(new Components.CreepComponent(Components.TargetType.Ground));
             
+            return creep;
+        }
+
+        public static Entity createSimpleFly(int x, int y, Vector2 v)
+        {
+            var creep = new Entity();
+
+            creep.Add(new Components.Sprite(creepSprite, Color.CadetBlue, Color.Black, rotatable: true, priority: .6f));
+
+            creep.Add(new Components.Position(x, y, .5f, .75f));
+            creep.Add(new Components.Orientation(90));
+
+            creep.Add(new Components.PathMovable(MOVE_AMOUNT, v));
+            creep.Add(new Components.Cost(STANDARD_COST));
+            creep.Add(new Components.Health(STANDARD_HEALTH));
+            creep.Add(new Components.Damage(STANDARD_DAMAGE));
+            creep.Add(new Components.CreepComponent(Components.TargetType.Air));
+
             return creep;
         }
     }

@@ -57,6 +57,9 @@ namespace Systems
         {
         }
 
+        /// <summary>
+        /// converts from game coords to pixel coords
+        /// </summary>
         public static Rectangle convertGameToPix(float x, float y, float w, float h) {
 
             Rectangle area = new Rectangle();
@@ -66,7 +69,10 @@ namespace Systems
             area.Height = (int)(h * CELL_SIZE);
             return area;
         }
-
+        
+        /// <summary>
+        /// converts from pixel coords to game cords
+        /// </summary>
         public static Vector2 convertPixToGame(int x, int y) { 
             Vector2 area = new Vector2();
 
@@ -107,6 +113,9 @@ namespace Systems
             return true;
         }
 
+        /// <summary>
+        /// if 2 entities collide
+        /// </summary>
         public static bool collides(Entity a, Entity b)
         {
             var aPosition = a.GetComponent<Components.Position>();
@@ -162,15 +171,24 @@ namespace Systems
             return creep;
         }
 
+        /// <summary>
+        /// distance between 2 points
+        /// </summary>
         public static int distance(Vector2 pointA, Vector2 pointB)
         {
             return (int)Math.Sqrt(Math.Pow((pointA.X - pointB.X), 2) + Math.Pow((pointA.Y - pointB.Y), 2));
         }
 
+        /// <summary>
+        /// angle between 2 points
+        /// </summary>
         public static float angle(Vector2 originPoint, Vector2 goalPoint) {
             return (float)Math.Atan2(goalPoint.Y - originPoint.Y, goalPoint.X - originPoint.X);
         }
 
+        /// <summary>
+        /// cross product of 2 radian angles
+        /// </summary>
         public static float crossProduct(float angleA, float angleB)
         {
             Vector2 vA = new Vector2((float)Math.Cos(angleA), (float)Math.Sin(angleA));

@@ -38,7 +38,7 @@ namespace Systems
                     var creepComponent = creep.GetComponent<Components.CreepComponent>();
                     float curDistance = CoordinateSystem.distance(new Vector2(towerPosition.x, towerPosition.y), new Vector2(creepPosition.x, creepPosition.y));
 
-                    if ( (curDistance <= towerComponent.range) && (towerComponent.targetType == creepComponent.creepType) &&  (minCreep == null || minDistance > curDistance)) {
+                    if ( (curDistance <= towerComponent.range) && ( (towerComponent.targetType == creepComponent.creepType) || towerComponent.targetType == Components.TargetType.Both) &&  (minCreep == null || minDistance > curDistance)) {
                         minCreep = creep;
                         minDistance = curDistance;
                     }
@@ -100,18 +100,18 @@ namespace Systems
                 {
 
                     Entity bullet;
-                    if (towerComponent.targetType == Components.TargetType.Air)
+                    if (towerComponent.bulletType == Components.bulletType.bomb)
                     {
-
+                        bullet = Bullet.createBomb(towerPos.CenterX, towerPos.CenterY, targetCreep, towerComponent.level, towerComponent.targetType);
                     }
-                    else if (towerComponent.targetType == Components.TargetType.Ground)
+                    else if (towerComponent.bulletType == Components.bulletType.missle)
                     {
+                        bullet = Bullet.createMissle(towerPos.CenterX, towerPos.CenterY, targetCreep, towerComponent.level, towerComponent.targetType);
                     }
                     else
                     {
-
+                        bullet = Bullet.createProjectile(towerPos.CenterX, towerPos.CenterY, targetCreep, towerComponent.level);
                     }
-                    bullet = SimpleBullet.create(towerPos.CenterX, towerPos.CenterY, targetCreep, towerComponent.level);
                     GameModel.m_addThese.Add(bullet);
                 }
             }

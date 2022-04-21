@@ -66,10 +66,9 @@ namespace Systems
                 var orientation = entity.GetComponent<Components.Orientation>();
                 var position = entity.GetComponent<Components.Position>();
 
-                if (movable.path.Count > 0)
+                if (movable.path != null &&  movable.path.Count > 0)
                 {
                     Vector2 nextPoint = movable.path[0];
-
                     if (movable.path.Count > 1)
                     {
                         if (nextPoint.X == Math.Floor(position.x) && nextPoint.Y == Math.Floor(position.y))
@@ -80,15 +79,18 @@ namespace Systems
                             orientation.radianGoal = CoordinateSystem.angle(new Vector2(position.CenterX, position.CenterY), new Vector2(nextPoint.X + .5f, nextPoint.Y + .5f));
                         }
                     }
-                    else {
-                        if (nextPoint.X == Math.Floor(position.x) && nextPoint.Y == Math.Floor(position.y))
-                        {
-                            var damage = entity.GetComponent<Components.Damage>();
-                            GameModel.health -= (int)damage.damage * 5;
+                }
+                else
+                {
+                    orientation.radianGoal = CoordinateSystem.angle(new Vector2(position.CenterX, position.CenterY), new Vector2(movable.goal.X + .5f, movable.goal.Y + .5f));
+                }
 
-                            GameModel.m_removeThese.Add(entity);
-                        }
-                    }
+                if (movable.goal.X == Math.Floor(position.CenterX - .5f) && movable.goal.Y == Math.Floor(position.CenterY - .5f))
+                {
+                    var damage = entity.GetComponent<Components.Damage>();
+                    GameModel.health -= (int)damage.damage;
+
+                    GameModel.m_removeThese.Add(entity);
                 }
 
                 orientation.rotateToGoal(gameTime);
@@ -97,8 +99,6 @@ namespace Systems
 
             }
         }
-
-
 
         /// <summary>
         /// complete map setup
@@ -172,8 +172,13 @@ namespace Systems
             //creep path checking
             var creeps = CoordinateSystem.Instance().findCreeps();
             foreach (var entity in creeps) {
-                if (!setEntityPath(entity)) {
-                    return false;
+                var creepComponent = entity.GetComponent<Components.CreepComponent>();
+                if (creepComponent.creepType == Components.TargetType.Ground)
+                {
+                    if (!setEntityPath(entity))
+                    {
+                        return false;
+                    }
                 }
             }
 

@@ -118,25 +118,34 @@ namespace CS5410.TowerDefenseGame
 
         private void init(ContentManager content)
         {
-            SimpleBullet.init(content);
+            Bullet.init(content);
             SimpleCreep.init(content);
             MouseEntity.init(content);
-            SimpleTower.init(content);
+            Tower.init(content);
             
 
             var mouse = MouseEntity.create(4, 4);
             AddEntity(mouse);
 
-            var tower = SimpleTower.create( 2, 2);
-            AddEntity(tower);
-             tower = SimpleTower.create(4, 4);
-            AddEntity(tower);
-             tower = SimpleTower.create(9, 7);
-            AddEntity(tower);
-             tower = SimpleTower.create( 10, 6);
+            var tower = Tower.createSimpleTower( 2, 2);
             AddEntity(tower);
 
-            var creep = SimpleCreep.create( 0, 0, new Vector2(9,9) );
+            tower = Tower.createSimpleTower(3, 3);
+            AddEntity(tower);
+            tower = Tower.createMissleTower(5, 4);
+            AddEntity(tower);
+            tower = Tower.createMissleTower(5, 5);
+            AddEntity(tower);
+
+            tower = Tower.createBombTower(9, 7);
+            AddEntity(tower);
+             tower = Tower.createBombTower( 10, 6);
+            AddEntity(tower);
+
+            var creep = SimpleCreep.createSimpleGround( 0, 0, new Vector2(10,10) );
+            AddEntity(creep);
+
+            creep = SimpleCreep.createSimpleFly(0, 0, new Vector2(10, 10));
             AddEntity(creep);
         }
 
