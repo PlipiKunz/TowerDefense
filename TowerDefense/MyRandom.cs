@@ -10,7 +10,7 @@ namespace CS5410
     /// *NextGaussian : Generate a normally distributed random number
     /// 
     /// </summary>
-    class MyRandom : Random
+    public class MyRandom : Random
     {
 
         /// <summary>

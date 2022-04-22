@@ -12,7 +12,7 @@ namespace Entities
     public class Bullet
     {
         private const float MOVE_AMOUNT = 2f/1000; // in game units to move each millisecond
-
+        private const int RANGE = 3;
         static Texture2D bulletSprite;
         public static void init(ContentManager content)
         {
@@ -51,9 +51,9 @@ namespace Entities
             var angleComp = bullet.GetComponent<Components.Orientation>();
             angleComp.radians = angle;
 
-            bullet.Add(new Components.Damage((uint)Math.Pow(2, level * 2)));
+            bullet.Add(new Components.Damage((uint)Math.Pow(4, level * 2)));
             bullet.Add(new Components.BulletComponent(target, MOVE_AMOUNT * (float)(level + 1), Components.bulletType.missle));
-            bullet.Add(new Components.Bomb(2, type));
+            bullet.Add(new Components.Bomb(RANGE-1, type));
             return bullet;
         }
 
@@ -71,9 +71,9 @@ namespace Entities
             var angleComp = bullet.GetComponent<Components.Orientation>();
             angleComp.radians = angle;
 
-            bullet.Add(new Components.Damage((uint)Math.Pow(2, level * 2)));
-            bullet.Add(new Components.BulletComponent(target, MOVE_AMOUNT * (float)(level + 1), Components.bulletType.bomb));
-            bullet.Add(new Components.Bomb(2, type));
+            bullet.Add(new Components.Damage((uint)Math.Pow(4, level * 2)));
+            bullet.Add(new Components.BulletComponent(target, MOVE_AMOUNT * 3 * (float)(level + 1), Components.bulletType.bomb, new Vector2(targetPos.x, targetPos.y)));
+            bullet.Add(new Components.Bomb(RANGE, type));
             return bullet;
         }
     }

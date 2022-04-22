@@ -56,6 +56,14 @@ namespace Systems
             float curMovmement = bulletComponent.moveAmount * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             bulletPos.move(new Vector2((float)Math.Cos(bulletOrientation.radianGoal), (float)Math.Sin(bulletOrientation.radianGoal)), curMovmement);
 
+
+            //other bullet types get particle effect trails
+            if (bulletComponent.type != Components.bulletType.projectile) {
+                Renderer.m_trail_emitter.addTrail(bullet);
+            }
+
+
+            //if the bulets collide with the entity or reach their goal
             if (bulletComponent.type != Components.bulletType.bomb)
             {
                 var creep = bulletComponent.target;
@@ -79,7 +87,6 @@ namespace Systems
             }
             else { 
                 var bombComponent = bullet.GetComponent<Components.Bomb>();
-
                 foreach (var creep in CoordinateSystem.Instance().findCreeps())
                 {
                     var creepPos = creep.GetComponent<Components.Position>();
@@ -92,9 +99,13 @@ namespace Systems
                 }
             }
 
+            if (bulletComponent.type != Components.bulletType.projectile) {
+
+                Renderer.m_explosion_emitter.addExplosion(bullet);
+            }
+
             GameModel.m_removeThese.Add(bullet);
         }
-
 
         public void hitCreep(Entity creep, uint damage)
         {
@@ -104,12 +115,14 @@ namespace Systems
 
                 if (creepHealth.health <= 0)
                 {
-                    var creepScore = creep.GetComponent<Components.Cost>();
+                    int creepScore = (int)creep.GetComponent<Components.Cost>().cost;
 
-                    GameModel.score += (int)creepScore.cost;
-                    GameModel.funds += (int)creepScore.cost;
+                    GameModel.score += creepScore;
+                    GameModel.funds += creepScore;
 
                     GameModel.m_removeThese.Add(creep);
+
+                    Renderer.m_text_emitter.addText(creep, creepScore.ToString());
                 }
                 
             }

@@ -4,18 +4,23 @@ using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Systems
 {
     class Renderer : System
     {
         private readonly SpriteBatch m_spriteBatch;
+
         private readonly Texture2D m_texBackground;
         private readonly SpriteFont spriteFont;
-        public static ParticleEmitter m_emitter;
         public static Texture2D blank;
 
-        public Renderer(ContentManager content, SpriteBatch spriteBatch, GraphicsDevice gd, ParticleEmitter pe) :
+        public static ExplosionEmitter m_explosion_emitter;
+        public static TrailEmitter m_trail_emitter;
+        public static TextEmitter m_text_emitter;
+
+        public Renderer(ContentManager content, SpriteBatch spriteBatch, GraphicsDevice gd) :
             base(typeof(Components.Sprite), typeof(Components.Position))
         {
             m_spriteBatch = spriteBatch;
@@ -23,12 +28,16 @@ namespace Systems
             m_texBackground = content.Load<Texture2D>("Sprites/SquareSprite");
             blank = new Texture2D(gd, 1, 1);
 
-            m_emitter = pe;
+            m_explosion_emitter = new ExplosionEmitter(content);
+            m_trail_emitter = new TrailEmitter(content);
+            m_text_emitter = new TextEmitter(content);
         }
 
         public override void Update(GameTime gameTime)
         {
-            m_emitter.update(gameTime);
+            m_explosion_emitter.update(gameTime);
+            m_trail_emitter.update(gameTime);   
+            m_text_emitter.update(gameTime);
 
             m_spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack);
 
@@ -41,7 +50,9 @@ namespace Systems
                 renderEntity(entity);
             }
 
-            m_emitter.draw(m_spriteBatch);
+            m_explosion_emitter.draw(m_spriteBatch);
+            m_trail_emitter.draw(m_spriteBatch);
+            m_text_emitter.draw(m_spriteBatch);
 
             drawUI();
 
@@ -51,34 +62,31 @@ namespace Systems
         public void drawUI() {
             string text = "Score: " + GameModel.score;
             Vector2 stringSize = spriteFont.MeasureString(text);
-            drawStrokedString(spriteFont, text, new Vector2(), Color.Yellow);
+            Renderer.drawStrokedString(spriteFont, text, new Vector2(), Color.Yellow, m_spriteBatch);
             text = "Level: " + GameModel.level;
             stringSize = spriteFont.MeasureString(text);
-            drawStrokedString(spriteFont, text, new Vector2(0, stringSize.Y), Color.Yellow);
-
+            Renderer.drawStrokedString(spriteFont, text, new Vector2(0, stringSize.Y), Color.Yellow, m_spriteBatch);
 
             text = "Health: " + GameModel.health;
             stringSize = spriteFont.MeasureString(text);
-            drawStrokedString(spriteFont, text,new Vector2(CoordinateSystem.SWIDTH - CoordinateSystem.OFFSET_X, 0),Color.Yellow);
+            Renderer.drawStrokedString(spriteFont, text,new Vector2(CoordinateSystem.SWIDTH - CoordinateSystem.OFFSET_X, 0),Color.Yellow, m_spriteBatch);
             text = "Funds: " + GameModel.funds;
             stringSize = spriteFont.MeasureString(text);
-            drawStrokedString(spriteFont, text, new Vector2(CoordinateSystem.SWIDTH - CoordinateSystem.OFFSET_X, stringSize.Y), Color.Yellow);
-
-
+            Renderer.drawStrokedString(spriteFont, text, new Vector2(CoordinateSystem.SWIDTH - CoordinateSystem.OFFSET_X, stringSize.Y), Color.Yellow, m_spriteBatch);
         }
 
-        public void drawStrokedString(SpriteFont font, string text, Vector2 pos, Color c) {
+        public static void drawStrokedString(SpriteFont font, string text, Vector2 pos, Color c, SpriteBatch sb) {
             for (int i = -1; i <= 1; i += 2) {
                 Vector2 offsetPos = pos;
                 offsetPos.X += i*1;
                 offsetPos.Y += i*1;
-                drawString(font, text, offsetPos, Color.Black, .99f);
+                Renderer.drawString(font, text, offsetPos, Color.Black, .99f, sb);
             }
-            drawString(font, text, pos, c, 1);
+            Renderer.drawString(font, text, pos, c, 1, sb);
         }
-        public void drawString(SpriteFont font, string text, Vector2 pos, Color c, float layerDepth)
+        public static void drawString(SpriteFont font, string text, Vector2 pos, Color c, float layerDepth, SpriteBatch sb)
         {
-            m_spriteBatch.DrawString(
+            sb.DrawString(
                 font,
                 text,
                 pos,
@@ -125,7 +133,7 @@ namespace Systems
                 }
             }
         }
-        private void draw(Texture2D image, Rectangle destRect, Color stroke, float layerDepth = 0, float rotation = 0, Rectangle? sourceRect = null)
+        public void draw(Texture2D image, Rectangle destRect, Color stroke, float layerDepth = 0, float rotation = 0, Rectangle? sourceRect = null)
         {
             destRect.X += destRect.Width / 2;
             destRect.Y += destRect.Height / 2;

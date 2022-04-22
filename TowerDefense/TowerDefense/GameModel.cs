@@ -54,7 +54,7 @@ namespace CS5410.TowerDefenseGame
             Systems.CreepMovement.reset();
             m_sysCreepMovement = Systems.CreepMovement.Instance();
 
-            m_sysRenderer = new Systems.Renderer(content, spriteBatch, gd, new ParticleEmitter(content, 5, 2, new TimeSpan(0, 0, 1)));
+            m_sysRenderer = new Systems.Renderer(content, spriteBatch, gd);
             m_sysMouseHandeler = new Systems.MouseHandeler();
             m_towerSystem = new Systems.TowerSystem();
             m_sysKeyboardInput = new Systems.KeyboardInput();
