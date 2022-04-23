@@ -15,7 +15,6 @@ namespace CS5410.TowerDefenseGame
         public bool isDone;
         public static int health;
         public static int funds;
-        public static int level;
 
         private const int GRID_SIZE = 11;
         private readonly int WINDOW_WIDTH;
@@ -31,6 +30,7 @@ namespace CS5410.TowerDefenseGame
         private Systems.KeyboardInput m_sysKeyboardInput;
         private Systems.TowerSystem m_towerSystem;
         private Systems.BulletSystem m_bulletSystem;
+        private Systems.LevelSystem m_levelSystem;
 
         public GameModel(int width, int height)
         {
@@ -42,10 +42,8 @@ namespace CS5410.TowerDefenseGame
         {
             isDone = false;
             score = 0;
-            level = 0;
             health = 1;
             funds = 100;
-
 
             Systems.CoordinateSystem.reset();
             m_coordinateSystem = Systems.CoordinateSystem.Instance();
@@ -59,15 +57,13 @@ namespace CS5410.TowerDefenseGame
             m_towerSystem = new Systems.TowerSystem();
             m_sysKeyboardInput = new Systems.KeyboardInput();
             m_bulletSystem = new Systems.BulletSystem();
+            m_levelSystem = new Systems.LevelSystem();
 
             init(content);
         }
 
         public void update(GameTime gameTime)
         {
-            if (health <= 0) {
-                isDone = true;
-            }
 
             m_coordinateSystem.Update(gameTime);
             m_sysKeyboardInput.Update(gameTime);
@@ -75,6 +71,8 @@ namespace CS5410.TowerDefenseGame
             m_sysMouseHandeler.Update(gameTime);
             m_towerSystem.Update(gameTime);
             m_bulletSystem.Update(gameTime);
+            m_levelSystem.Update(gameTime);
+
 
             foreach (var entity in m_removeThese)
             {
@@ -87,6 +85,12 @@ namespace CS5410.TowerDefenseGame
                 AddEntity(entity);
             }
             m_addThese.Clear();
+
+            if (health <= 0)
+            {
+                isDone = true;
+            }
+
         }
 
         public void render(GameTime gameTime)
@@ -94,7 +98,7 @@ namespace CS5410.TowerDefenseGame
             m_sysRenderer.Update(gameTime);
         }
 
-        private void AddEntity(Entity entity)
+        public void AddEntity(Entity entity)
         {
             m_coordinateSystem.Add(entity);
             m_sysKeyboardInput.Add(entity);
@@ -103,9 +107,11 @@ namespace CS5410.TowerDefenseGame
             m_sysRenderer.Add(entity);
             m_towerSystem.Add(entity);
             m_bulletSystem.Add(entity);
+            m_levelSystem.Add(entity);
+
         }
 
-        private void RemoveEntity(Entity entity)
+        public void RemoveEntity(Entity entity)
         {
             m_coordinateSystem.Remove(entity.Id);
             m_sysKeyboardInput.Remove(entity.Id);
@@ -114,16 +120,16 @@ namespace CS5410.TowerDefenseGame
             m_sysRenderer.Remove(entity.Id);
             m_towerSystem.Remove(entity.Id);
             m_bulletSystem.Remove(entity.Id);
+            m_levelSystem.Remove(entity.Id);
         }
 
         private void init(ContentManager content)
         {
             Bullet.init(content);
-            SimpleCreep.init(content);
+            Creeps.init(content);
             MouseEntity.init(content);
             Tower.init(content);
             
-
             var mouse = MouseEntity.create(4, 4);
             AddEntity(mouse);
 
@@ -141,12 +147,6 @@ namespace CS5410.TowerDefenseGame
             AddEntity(tower);
              tower = Tower.createBombTower( 10, 6);
             AddEntity(tower);
-
-            var creep = SimpleCreep.createSimpleGround( 0, 0, new Vector2(10,10) );
-            AddEntity(creep);
-
-            creep = SimpleCreep.createSimpleFly(0, 0, new Vector2(10, 10));
-            AddEntity(creep);
         }
 
     }

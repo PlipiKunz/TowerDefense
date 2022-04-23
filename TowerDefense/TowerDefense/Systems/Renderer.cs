@@ -39,7 +39,7 @@ namespace Systems
             m_trail_emitter.update(gameTime);   
             m_text_emitter.update(gameTime);
 
-            m_spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack);
+            m_spriteBatch.Begin(SpriteSortMode.FrontToBack);
 
             Rectangle background = CoordinateSystem.convertGameToPix(0, 0, CoordinateSystem.GRID_SIZE, CoordinateSystem.GRID_SIZE);
             m_spriteBatch.Draw(m_texBackground, background, Color.Blue);
@@ -63,7 +63,7 @@ namespace Systems
             string text = "Score: " + GameModel.score;
             Vector2 stringSize = spriteFont.MeasureString(text);
             Renderer.drawStrokedString(spriteFont, text, new Vector2(), Color.Yellow, m_spriteBatch);
-            text = "Level: " + GameModel.level;
+            text = "Level: " + LevelSystem.level;
             stringSize = spriteFont.MeasureString(text);
             Renderer.drawStrokedString(spriteFont, text, new Vector2(0, stringSize.Y), Color.Yellow, m_spriteBatch);
 
@@ -126,10 +126,10 @@ namespace Systems
 
                     healthBar.X = area.Center.X - healthBar.Width / 2;
                     healthBar.Y = area.Y - healthBar.Height - offsetAmount*2;
-                    draw(m_texBackground, healthBar, Color.Red, appearance.priority-.02f);
+                    draw(m_texBackground, healthBar, Color.Red, appearance.priority+.01f);
 
                     healthBar.Width = (int)(area.Width * 1.25 * ((float)health.health / health.max_health));
-                    draw(m_texBackground, healthBar, Color.LightGreen, appearance.priority-.01f);
+                    draw(m_texBackground, healthBar, Color.LightGreen, appearance.priority+.02f);
                 }
             }
         }

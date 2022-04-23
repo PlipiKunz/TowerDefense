@@ -167,7 +167,7 @@ namespace Systems
         /// set gridpath for each creep, returns true if all creeps have a valid path, else false
         /// also makes sure entrances and exits can connect
         /// </summary>
-        private bool creepPathSet()
+        public bool creepPathSet()
         {
             //creep path checking
             var creeps = CoordinateSystem.Instance().findCreeps();
@@ -175,7 +175,7 @@ namespace Systems
                 var creepComponent = entity.GetComponent<Components.CreepComponent>();
                 if (creepComponent.creepType == Components.TargetType.Ground)
                 {
-                    if (!setEntityPath(entity))
+                    if (setEntityPath(entity))
                     {
                         return false;
                     }
@@ -200,7 +200,7 @@ namespace Systems
             return true;
         }
 
-        private bool setEntityPath(Entity creep)
+        public bool setEntityPath(Entity creep)
         {
             var movable = creep.GetComponent<Components.PathMovable>();
             var position = creep.GetComponent<Components.Position>();
