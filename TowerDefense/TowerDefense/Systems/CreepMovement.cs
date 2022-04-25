@@ -85,7 +85,8 @@ namespace Systems
                     orientation.radianGoal = CoordinateSystem.angle(new Vector2(position.CenterX, position.CenterY), new Vector2(movable.goal.X + .5f, movable.goal.Y + .5f));
                 }
 
-                if (movable.goal.X == Math.Floor(position.CenterX - .5f) && movable.goal.Y == Math.Floor(position.CenterY - .5f))
+
+                if (movable.goal.X == Math.Floor(position.CenterX) && movable.goal.Y == Math.Floor(position.CenterY))
                 {
                     var damage = entity.GetComponent<Components.Damage>();
                     GameModel.health -= (int)damage.damage;

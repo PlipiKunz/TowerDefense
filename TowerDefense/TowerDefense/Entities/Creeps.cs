@@ -19,8 +19,15 @@ namespace Entities
             creepSprite = content.Load<Texture2D>("Sprites/SquareSprite");
         }
 
-        public static Entity createSimpleGround(float x, float y, Vector2 goal)
+        private static float scale(int level)
         {
+            return 1 + (.25f * (level - 1));
+        }
+
+        public static Entity createSimpleGround(float x, float y, Vector2 goal, int level)
+        {
+            float scaleAmount = scale(level);
+
             var creep = new Entity();
 
             creep.Add(new Components.Sprite(creepSprite, Color.Green, Color.Black, rotatable:true));
@@ -28,17 +35,19 @@ namespace Entities
             creep.Add(new Components.Position(x, y, .5f, .75f));
             creep.Add(new Components.Orientation(90));
              
-            creep.Add(new Components.PathMovable(MOVE_AMOUNT, goal));
-            creep.Add(new Components.Cost(STANDARD_COST));
-            creep.Add(new Components.Health(STANDARD_HEALTH));
+            creep.Add(new Components.PathMovable(MOVE_AMOUNT * scaleAmount , goal));
+            creep.Add(new Components.Cost((uint)(STANDARD_COST * scaleAmount)));
+            creep.Add(new Components.Health((int)(STANDARD_HEALTH * scaleAmount)));
+
             creep.Add(new Components.Damage(STANDARD_DAMAGE));
             creep.Add(new Components.CreepComponent(Components.TargetType.Ground));
             
             return creep;
         }
 
-        public static Entity createSimpleFly(float x, float y, Vector2 goal)
+        public static Entity createSimpleFly(float x, float y, Vector2 goal, int level)
         {
+            float scaleAmount = scale(level);
             var creep = new Entity();
 
             creep.Add(new Components.Sprite(creepSprite, Color.CadetBlue, Color.Black, rotatable: true, priority: .6f));
@@ -46,9 +55,10 @@ namespace Entities
             creep.Add(new Components.Position(x, y, .5f, .75f));
             creep.Add(new Components.Orientation(90));
 
-            creep.Add(new Components.PathMovable(MOVE_AMOUNT, goal));
-            creep.Add(new Components.Cost(STANDARD_COST));
-            creep.Add(new Components.Health(STANDARD_HEALTH));
+            creep.Add(new Components.PathMovable(MOVE_AMOUNT * scaleAmount, goal));
+            creep.Add(new Components.Cost((uint)(STANDARD_COST * scaleAmount)));
+            creep.Add(new Components.Health((int)(STANDARD_HEALTH * scaleAmount)));
+
             creep.Add(new Components.Damage(STANDARD_DAMAGE));
             creep.Add(new Components.CreepComponent(Components.TargetType.Air));
 

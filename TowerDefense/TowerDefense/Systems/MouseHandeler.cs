@@ -18,6 +18,7 @@ namespace Systems
 
         private ButtonState prevState = ButtonState.Released;
 
+        public bool mouseSet = false;
         /// <summary>
         /// Handel mouse system data
         /// </summary>
@@ -27,10 +28,13 @@ namespace Systems
             Entity mouse = findMouse(m_entities);
             if (mouse != null)
             {
-                MouseCursor mouseCursor = MouseCursor.FromTexture2D(Renderer.blank, 0, 0);
-
                 MouseState mouseState = Mouse.GetState();
-                Mouse.SetCursor(mouseCursor);
+                if (!mouseSet)
+                {
+                    MouseCursor mouseCursor = MouseCursor.FromTexture2D(Renderer.blank, 0, 0);
+                    Mouse.SetCursor(mouseCursor);
+                    mouseSet = true;
+                }
 
                 updateMousePosition(gameTime,mouse, mouseState);
                 updateMouseClick(gameTime,mouse, mouseState);

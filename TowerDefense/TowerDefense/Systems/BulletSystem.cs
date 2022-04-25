@@ -80,7 +80,7 @@ namespace Systems
             var bulletPos = bullet.GetComponent<Components.Position>();
 
             var damage = bullet.GetComponent<Components.Damage>().damage;
-            if (bulletComponent.type != Components.bulletType.bomb)
+            if (bulletComponent.type == Components.bulletType.projectile)
             {
                 var creep = bulletComponent.target;
                 hitCreep(creep, damage);
@@ -91,7 +91,8 @@ namespace Systems
                 {
                     var creepPos = creep.GetComponent<Components.Position>();
                     var creepComp = creep.GetComponent<Components.CreepComponent>();
-                    if (creepComp.creepType == bombComponent.targetType) { 
+                    if (creepComp.creepType == bombComponent.targetType || bombComponent.targetType == Components.TargetType.Both)
+                    { 
                         if (CoordinateSystem.distance(new Vector2(bulletPos.CenterX, bulletPos.CenterY), new Vector2(creepPos.CenterX, creepPos.CenterY)) <= bombComponent.range) {
                             hitCreep(creep, damage);
                         }

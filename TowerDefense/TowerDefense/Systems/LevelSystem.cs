@@ -13,6 +13,29 @@ namespace Systems
     /// </summary>
     class LevelSystem : System
     {
+
+        static LevelSystem instance;
+        private static object lockObj = new object();
+        public static LevelSystem Instance()
+        {
+            if (instance == null)
+            {
+                lock (lockObj)
+                {
+                    instance = new LevelSystem();
+                }
+            }
+
+            return instance;
+        }
+        public static void reset()
+        {
+            lock (lockObj)
+            {
+                instance = new LevelSystem();
+            }
+        }
+
         public static int level;
         public static bool inLevel;
 
@@ -22,7 +45,7 @@ namespace Systems
         public uint elapsedWaveInterval;
 
 
-        public const uint SpawnInterval = 333;
+        public const uint SpawnInterval = 500;
         public uint elapsedSpawnInterval;
 
         public uint creepsToSpawn;
@@ -31,12 +54,10 @@ namespace Systems
 
         protected MyRandom m_random = new MyRandom();
 
-        public LevelSystem() : base(typeof(Components.CreepComponent))
+        protected LevelSystem() : base(typeof(Components.CreepComponent))
         {
             inLevel = false;
             level = 0;
-
-            nextLevel();
         }
 
         public override void Update(GameTime gameTime)
@@ -76,23 +97,42 @@ namespace Systems
         public void addCreep() {
             if (elapsedSpawnInterval >= SpawnInterval)
             {
-                if (m_random.NextDouble() >= .66f)
+                if (creepsToSpawn > 0)
                 {
+                    creepsToSpawn--;
 
-                    if (creepsToSpawn > 0)
-                    {
-                        creepsToSpawn--;
+                    var endpoints = getEntrancesAndExits(level);
+                    Vector2 startPos = endpoints[0];
+                    Vector2 endPos = endpoints[1];
 
-                        Vector2 startPos = entrancesAndExits[0];
-                        Vector2 endPos = entrancesAndExits[1];
+                    var creep = Creeps.createSimpleGround(startPos.X, startPos.Y, endPos, level);
 
-                        var creep = Creeps.createSimpleGround(startPos.X, startPos.Y, endPos);
-                        GameModel.m_addThese.Add(creep);
-                        CreepMovement.Instance().upToDate = false;
-                    }
+                    GameModel.m_addThese.Add(creep);
+                    CreepMovement.Instance().upToDate = false;
                 }
                 elapsedSpawnInterval = 0;
             }
+        }
+
+        public List<Vector2> getEntrancesAndExits(int level)
+        {
+            List<Vector2> result = new List<Vector2>();
+
+            if (level == 1)
+            {
+                result.Add(entrancesAndExits[0]);
+                result.Add(entrancesAndExits[1]);
+            }
+            else if (level == 2)
+            {
+                result.Add(entrancesAndExits[2]);
+                result.Add(entrancesAndExits[3]);
+            }
+            else {
+                return getEntrancesAndExits((curWaveCount % 2) + 1);
+            }
+
+            return result;
         }
 
         public void nextLevel() { 
@@ -108,8 +148,11 @@ namespace Systems
 
             entrancesAndExits = new List<Vector2>()
             {
-                new Vector2(0,0),
-                new Vector2(CoordinateSystem.GRID_SIZE-1, CoordinateSystem.GRID_SIZE-1),
+                new Vector2(0, CoordinateSystem.GRID_SIZE/2),
+                new Vector2(CoordinateSystem.GRID_SIZE-1, CoordinateSystem.GRID_SIZE/2),
+                new Vector2(CoordinateSystem.GRID_SIZE/2, 0),
+                new Vector2(CoordinateSystem.GRID_SIZE/2, CoordinateSystem.GRID_SIZE-1),
+
             };
         }
     }

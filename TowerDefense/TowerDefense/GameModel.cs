@@ -57,7 +57,9 @@ namespace CS5410.TowerDefenseGame
             m_towerSystem = new Systems.TowerSystem();
             m_sysKeyboardInput = new Systems.KeyboardInput();
             m_bulletSystem = new Systems.BulletSystem();
-            m_levelSystem = new Systems.LevelSystem();
+
+            Systems.LevelSystem.reset();
+            m_levelSystem = Systems.LevelSystem.Instance();
 
             init(content);
         }
@@ -133,7 +135,7 @@ namespace CS5410.TowerDefenseGame
             var mouse = MouseEntity.create(4, 4);
             AddEntity(mouse);
 
-            var tower = Tower.createSimpleTower( 2, 2);
+            var tower = Tower.createSimpleTower(2, 2);
             AddEntity(tower);
 
             tower = Tower.createSimpleTower(3, 3);
@@ -145,7 +147,7 @@ namespace CS5410.TowerDefenseGame
 
             tower = Tower.createBombTower(9, 7);
             AddEntity(tower);
-             tower = Tower.createBombTower( 10, 6);
+            tower = Tower.createBombTower(10, 6);
             AddEntity(tower);
         }
 

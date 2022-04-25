@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CS5410.Persistence;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
@@ -25,14 +26,43 @@ namespace Systems
         {
         }
 
+
+        bool prevUpgrade = false;
+        bool prevSell = false;
+        bool prevNext = false;
         public override void Update(GameTime gameTime)
         {
-            foreach (var entity in m_entities.Values)
+            foreach (var entry in KeyboardPersistence.actionToKey)
             {
-                var movable = entity.GetComponent<Components.PathMovable>();
-                var input = entity.GetComponent<Components.KeyboardControlled>();
+                var KeyPress = entry.Value;
+                var KeyAction = entry.Key;
 
-                
+                bool press = Keyboard.GetState().IsKeyDown(KeyPress);
+
+                if (KeyAction == KeyboardActions.Upgrade)
+                {
+                    if (press && !prevUpgrade)
+                    {
+
+                    }
+                    prevUpgrade = press;
+                }
+                else if (KeyAction == KeyboardActions.Sell)
+                {
+                    if (press && !prevSell) { 
+                    
+                    }
+                    prevSell = press;
+                }
+                else
+                {
+                    if (press && !prevNext && !LevelSystem.inLevel)
+                    {
+                        LevelSystem.Instance().nextLevel();
+                    }
+                    prevNext = press;
+                }
+
             }
         }
     }
