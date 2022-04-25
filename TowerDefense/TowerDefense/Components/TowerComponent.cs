@@ -8,6 +8,13 @@ namespace Components
         Both
     }
 
+    public enum towerClass { 
+        projectile, 
+        bomb, 
+        missle,
+        other
+    }
+
     public class TowerComponent : Component
     {
         public uint range;
@@ -18,7 +25,8 @@ namespace Components
         public Entities.Entity target;
         public uint fireInterval { get; set; }
         public uint elapsedInterval;
-        public TowerComponent(uint range,  uint fireInterval, TargetType type, bulletType bulletType)
+        public towerClass tc;
+        public TowerComponent(uint range,  uint fireInterval, TargetType type, bulletType bulletType, towerClass tc)
         {
             this.range = range;
             this.fireInterval = fireInterval;
@@ -28,6 +36,7 @@ namespace Components
 
             this.level = (uint)level;
             this.target = null;
+            this.tc = tc;
         }
     }
 }

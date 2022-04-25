@@ -13,7 +13,7 @@ namespace Systems
         private readonly SpriteBatch m_spriteBatch;
 
         private readonly Texture2D m_texBackground;
-        private readonly SpriteFont spriteFont;
+        private static SpriteFont spriteFont;
         public static Texture2D blank;
 
         public static ExplosionEmitter m_explosion_emitter;
@@ -21,7 +21,7 @@ namespace Systems
         public static TextEmitter m_text_emitter;
 
         public Renderer(ContentManager content, SpriteBatch spriteBatch, GraphicsDevice gd) :
-            base(typeof(Components.Sprite), typeof(Components.Position))
+            base(typeof(Components.Drawable))
         {
             m_spriteBatch = spriteBatch;
             spriteFont = content.Load<SpriteFont>("Fonts/menu");
@@ -47,7 +47,18 @@ namespace Systems
             //render all the entities
             foreach (var entity in m_entities.Values)
             {
-                renderEntity(entity);
+                if (entity.ContainsComponent<Components.Sprite>())
+                {
+                    renderEntity(entity);
+                }
+                if (entity.ContainsComponent<Components.MenuComponent>()) { 
+                    var text = entity.GetComponent<Components.MenuComponent>();
+
+                    var pos = entity.GetComponent < Components.Position>();
+                    var adjsutedPos = CoordinateSystem.convertGameToPix(pos.x, pos.y, pos.w, pos.h);
+
+                    drawStrokedString(text.font, text.text, new Vector2(adjsutedPos.X, adjsutedPos.Y) ,  text.c ,  m_spriteBatch);
+                }
             }
 
             m_explosion_emitter.draw(m_spriteBatch);
@@ -90,10 +101,10 @@ namespace Systems
                 font,
                 text,
                 pos,
-                c, 0,new Vector2(), 1, SpriteEffects.None, layerDepth);
+                c, 0,new Vector2(), .9f, SpriteEffects.None, layerDepth);
         }
-        private void renderEntity(Entity entity)
-        {
+
+        private void renderEntity(Entity entity) {
             var appearance = entity.GetComponent<Components.Sprite>();
             var position = entity.GetComponent<Components.Position>();
 
@@ -103,9 +114,17 @@ namespace Systems
                 rotation = entity.GetComponent<Components.Orientation>().radians;
             }
 
+            renderImage(entity, appearance.image, rotation, appearance.priority, appearance.stroke, appearance.fill);
+        }
+        
+        private void renderImage(Entity entity, Texture2D texture, float rotation, float priority, Color stroke, Color fill)
+        {
+            var position = entity.GetComponent<Components.Position>();
+
+
             //drawing the stoked outline
             Rectangle area = CoordinateSystem.convertGameToPix(position.x, position.y, position.w, position.h);
-            draw(appearance.image, area, appearance.stroke, appearance.priority - .01f, rotation);
+            draw(texture, area, stroke, priority - .01f, rotation);
 
             //drawing the actual image, ontop of the stroked item
             int offsetAmount = 2;
@@ -113,7 +132,7 @@ namespace Systems
             area.Y += offsetAmount;
             area.Width -= offsetAmount * 2;
             area.Height -= offsetAmount * 2;
-            draw(appearance.image, area, appearance.fill, appearance.priority, rotation);
+            draw(texture, area, fill, priority, rotation);
 
             //if the entity has a health component
             if (entity.ContainsComponent<Components.Health>()) {
@@ -126,10 +145,10 @@ namespace Systems
 
                     healthBar.X = area.Center.X - healthBar.Width / 2;
                     healthBar.Y = area.Y - healthBar.Height - offsetAmount*2;
-                    draw(m_texBackground, healthBar, Color.Red, appearance.priority+.01f);
+                    draw(m_texBackground, healthBar, Color.Red, priority+.01f);
 
                     healthBar.Width = (int)(area.Width * 1.25 * ((float)health.health / health.max_health));
-                    draw(m_texBackground, healthBar, Color.LightGreen, appearance.priority+.02f);
+                    draw(m_texBackground, healthBar, Color.LightGreen, priority+.02f);
                 }
             }
         }

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-
+using Systems;
 
 namespace CS5410.TowerDefenseGame
 {
@@ -31,6 +31,7 @@ namespace CS5410.TowerDefenseGame
         private Systems.TowerSystem m_towerSystem;
         private Systems.BulletSystem m_bulletSystem;
         private Systems.LevelSystem m_levelSystem;
+        private Systems.SelectionSystem m_selectionSystem;
 
         public GameModel(int width, int height)
         {
@@ -42,7 +43,7 @@ namespace CS5410.TowerDefenseGame
         {
             isDone = false;
             score = 0;
-            health = 1;
+            health = 10;
             funds = 100;
 
             Systems.CoordinateSystem.reset();
@@ -57,6 +58,10 @@ namespace CS5410.TowerDefenseGame
             m_towerSystem = new Systems.TowerSystem();
             m_sysKeyboardInput = new Systems.KeyboardInput();
             m_bulletSystem = new Systems.BulletSystem();
+
+            Systems.SelectionSystem.reset();
+            m_selectionSystem = Systems.SelectionSystem.Instance();
+
 
             Systems.LevelSystem.reset();
             m_levelSystem = Systems.LevelSystem.Instance();
@@ -74,6 +79,7 @@ namespace CS5410.TowerDefenseGame
             m_towerSystem.Update(gameTime);
             m_bulletSystem.Update(gameTime);
             m_levelSystem.Update(gameTime);
+            m_selectionSystem.Update(gameTime);
 
 
             foreach (var entity in m_removeThese)
@@ -110,6 +116,7 @@ namespace CS5410.TowerDefenseGame
             m_towerSystem.Add(entity);
             m_bulletSystem.Add(entity);
             m_levelSystem.Add(entity);
+            m_selectionSystem.Add(entity);
 
         }
 
@@ -123,6 +130,7 @@ namespace CS5410.TowerDefenseGame
             m_towerSystem.Remove(entity.Id);
             m_bulletSystem.Remove(entity.Id);
             m_levelSystem.Remove(entity.Id);
+            m_selectionSystem.Remove(entity.Id);
         }
 
         private void init(ContentManager content)
@@ -131,7 +139,24 @@ namespace CS5410.TowerDefenseGame
             Creeps.init(content);
             MouseEntity.init(content);
             Tower.init(content);
-            
+            MenuItem.init(content);
+            box.init(content);
+
+            Entity curBox;
+            for (int i = 0; i < CoordinateSystem.GRID_SIZE; i++){
+                for (int j = 0; j < CoordinateSystem.GRID_SIZE; j++)
+                {
+                    bool goalPos = false;
+                    Vector2 pos = new Vector2(i, j);
+                    if (m_levelSystem.entrancesAndExits.Contains(pos)) {
+                        goalPos = true;
+                    }
+
+                    curBox = box.createSimple(i, j, goalPos);
+                    AddEntity(curBox);
+                }
+            }
+
             var mouse = MouseEntity.create(4, 4);
             AddEntity(mouse);
 

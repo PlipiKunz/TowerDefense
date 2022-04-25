@@ -77,19 +77,19 @@ namespace Systems
             Vector2 area = new Vector2();
 
             //out of bounds check
-            if (x < OFFSET_X) {
+            /*if (x < OFFSET_X) {
                 area.X = 0;
             }
             else if (x > (OFFSET_X + (GRID_SIZE * CELL_SIZE))){
 
                 area.X = GRID_SIZE;
             }
-            else {
+            else {*/
                 area.X = (float)(x - OFFSET_X) / (float)CELL_SIZE;
-            }
+            //}
 
             //out of bounds check
-            if (y < OFFSET_Y)
+            /*if (y < OFFSET_Y)
             {
                 area.Y = 0;
             }
@@ -97,9 +97,19 @@ namespace Systems
                 area.Y = GRID_SIZE;
             }
             else
-            {
+            {*/
                 area.Y = (float)(y - OFFSET_Y) / (float)CELL_SIZE;
-            }
+            //}
+
+            return area;
+        }
+
+        public static Vector2 convertPixToGameScalar(int x, int y)
+        {
+            Vector2 area = new Vector2();
+
+            area.X = (float)(x ) / (float)CELL_SIZE;
+            area.Y = (float)(y) / (float)CELL_SIZE;
 
             return area;
         }

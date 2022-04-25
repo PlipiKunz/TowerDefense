@@ -22,6 +22,7 @@ namespace Entities
         {
             var bullet = new Entity();
 
+            bullet.Add(new Components.Drawable());
             bullet.Add(new Components.Sprite(bulletSprite, Color.Yellow, Color.Black, .75f));
             bullet.Add(new Components.Position(x, y, .1f, .1f));
 
@@ -41,6 +42,7 @@ namespace Entities
         {
             var bullet = new Entity();
 
+            bullet.Add(new Components.Drawable());
             bullet.Add(new Components.Sprite(bulletSprite, Color.Yellow, Color.Black, .75f));
             bullet.Add(new Components.Position(x, y, .1f, .1f));
 
@@ -61,6 +63,7 @@ namespace Entities
         {
             var bullet = new Entity();
 
+            bullet.Add(new Components.Drawable());
             bullet.Add(new Components.Sprite(bulletSprite, Color.Yellow, Color.Black, .75f));
             bullet.Add(new Components.Position(x, y, .1f, .1f));
 

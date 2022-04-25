@@ -19,6 +19,7 @@ namespace Systems
         private ButtonState prevState = ButtonState.Released;
 
         public bool mouseSet = false;
+
         /// <summary>
         /// Handel mouse system data
         /// </summary>
@@ -49,17 +50,13 @@ namespace Systems
             var mouseEntityPos = mouse.GetComponent<Components.Position>();
             mouseEntityPos.x = mousePos.X;
             mouseEntityPos.y = mousePos.Y;
-            mouseEntityPos.fixBounds();
         }
 
         private void updateMouseClick(GameTime gameTime, Entity mouse, MouseState mouseState)
         {
             if (mouseState.LeftButton == ButtonState.Pressed && prevState == ButtonState.Released)
             {
-                if (CoordinateSystem.inGameBounds(mouseState.X, mouseState.Y))
-                {
-                    int a = 0;
-                }
+                SelectionSystem.Instance().click(mouse);
             }
 
             prevState = mouseState.LeftButton;

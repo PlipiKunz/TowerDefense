@@ -41,7 +41,7 @@ namespace Systems
 
         public bool inWave;
         public int curWaveCount;
-        public const uint WaveInterval = 5000;
+        public uint WaveInterval = 5000;
         public uint elapsedWaveInterval;
 
 
@@ -58,6 +58,16 @@ namespace Systems
         {
             inLevel = false;
             level = 0;
+
+
+            entrancesAndExits = new List<Vector2>()
+            {
+                new Vector2(0, CoordinateSystem.GRID_SIZE/2),
+                new Vector2(CoordinateSystem.GRID_SIZE-1, CoordinateSystem.GRID_SIZE/2),
+                new Vector2(CoordinateSystem.GRID_SIZE/2, 0),
+                new Vector2(CoordinateSystem.GRID_SIZE/2, CoordinateSystem.GRID_SIZE-1),
+
+            };
         }
 
         public override void Update(GameTime gameTime)
@@ -139,6 +149,9 @@ namespace Systems
             inLevel = true;
             level++;
 
+            WaveInterval -= 250;
+            if(WaveInterval < 500) WaveInterval = 500; 
+
             elapsedWaveInterval = 0;
 
             curWaveCount = 0;
@@ -146,14 +159,6 @@ namespace Systems
             creepsToSpawn = (uint)(Math.Pow(2, level) + curWaveCount);
             inWave = true;
 
-            entrancesAndExits = new List<Vector2>()
-            {
-                new Vector2(0, CoordinateSystem.GRID_SIZE/2),
-                new Vector2(CoordinateSystem.GRID_SIZE-1, CoordinateSystem.GRID_SIZE/2),
-                new Vector2(CoordinateSystem.GRID_SIZE/2, 0),
-                new Vector2(CoordinateSystem.GRID_SIZE/2, CoordinateSystem.GRID_SIZE-1),
-
-            };
         }
     }
         

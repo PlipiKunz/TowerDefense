@@ -25,13 +25,13 @@ namespace Entities
             var tower = new Entity();
 
             tower.Add(new Components.Sprite(towerSprite, Color.White, Color.Black, rotatable:true));
-
+            tower.Add(new Components.Drawable());
             tower.Add(new Components.Position(x, y));
             tower.Add(new Components.Orientation(degreeTurnSpeed:TURN_SPEED));
              
             tower.Add(new Components.Selectable());
             tower.Add(new Components.Cost(STANDARD_COST));
-            tower.Add(new Components.TowerComponent(STANDARD_RANGE, FIRE_INTERVAL, Components.TargetType.Ground, bulletType.projectile));
+            tower.Add(new Components.TowerComponent(STANDARD_RANGE, FIRE_INTERVAL, Components.TargetType.Ground, bulletType.projectile, towerClass.projectile));
 
             return tower;
         }
@@ -40,6 +40,7 @@ namespace Entities
         {
             var tower = new Entity();
 
+            tower.Add(new Components.Drawable());
             tower.Add(new Components.Sprite(towerSprite, Color.Red, Color.Black, rotatable: true));
 
             tower.Add(new Components.Position(x, y));
@@ -47,7 +48,7 @@ namespace Entities
 
             tower.Add(new Components.Selectable());
             tower.Add(new Components.Cost(STANDARD_COST));
-            tower.Add(new Components.TowerComponent(STANDARD_RANGE+1, FIRE_INTERVAL, Components.TargetType.Ground, bulletType.bomb));
+            tower.Add(new Components.TowerComponent(STANDARD_RANGE+1, FIRE_INTERVAL, Components.TargetType.Ground, bulletType.bomb, towerClass.bomb));
 
             return tower;
         }
@@ -55,6 +56,7 @@ namespace Entities
         public static Entity createMissleTower(int x, int y)
         {
             var tower = new Entity();
+            tower.Add(new Components.Drawable());
             tower.Add(new Components.Sprite(towerSprite, Color.Blue, Color.Black, rotatable: true));
 
             tower.Add(new Components.Position(x, y));
@@ -62,7 +64,7 @@ namespace Entities
 
             tower.Add(new Components.Selectable());
             tower.Add(new Components.Cost(STANDARD_COST));  
-            tower.Add(new Components.TowerComponent(STANDARD_RANGE+1, FIRE_INTERVAL, Components.TargetType.Both, bulletType.missle));
+            tower.Add(new Components.TowerComponent(STANDARD_RANGE+1, FIRE_INTERVAL, Components.TargetType.Both, bulletType.missle, towerClass.missle));
 
             return tower;
         }

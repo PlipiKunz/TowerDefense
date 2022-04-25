@@ -16,6 +16,7 @@ namespace Entities
         {
             var mouse = new Entity();
 
+            mouse.Add(new Components.Drawable());
             mouse.Add(new Components.Sprite(mouseSprite, Color.White, Color.Black, 1f));
             mouse.Add(new Components.Position(x, y, .15f, .2f));
             mouse.Add(new Components.Mouse());

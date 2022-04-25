@@ -184,7 +184,7 @@ namespace Systems
             }
 
             //makes sure all entrances and exits can connnect
-            List<Vector2> entrancesAndExits = new List<Vector2>();
+            List<Vector2> entrancesAndExits = LevelSystem.Instance().entrancesAndExits;
             foreach (var entrance in entrancesAndExits) {
                 foreach (var exit in entrancesAndExits) {
                     //makes sure entrance and exit arent the same

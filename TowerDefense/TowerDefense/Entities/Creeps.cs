@@ -30,6 +30,7 @@ namespace Entities
 
             var creep = new Entity();
 
+            creep.Add(new Components.Drawable());
             creep.Add(new Components.Sprite(creepSprite, Color.Green, Color.Black, rotatable:true));
 
             creep.Add(new Components.Position(x, y, .5f, .75f));
@@ -45,11 +46,34 @@ namespace Entities
             return creep;
         }
 
+        public static Entity createFastGround(float x, float y, Vector2 goal, int level)
+        {
+            float scaleAmount = scale(level);
+
+            var creep = new Entity();
+
+            creep.Add(new Components.Drawable());
+            creep.Add(new Components.Sprite(creepSprite, Color.Yellow, Color.Black, rotatable: true));
+
+            creep.Add(new Components.Position(x, y, .5f, .75f));
+            creep.Add(new Components.Orientation(90));
+
+            creep.Add(new Components.PathMovable(MOVE_AMOUNT * scaleAmount * 1.25f, goal));
+            creep.Add(new Components.Cost((uint)(STANDARD_COST * scaleAmount)));
+            creep.Add(new Components.Health((int)(STANDARD_HEALTH * scaleAmount)));
+
+            creep.Add(new Components.Damage(STANDARD_DAMAGE));
+            creep.Add(new Components.CreepComponent(Components.TargetType.Ground));
+
+            return creep;
+        }
+
         public static Entity createSimpleFly(float x, float y, Vector2 goal, int level)
         {
             float scaleAmount = scale(level);
             var creep = new Entity();
 
+            creep.Add(new Components.Drawable());
             creep.Add(new Components.Sprite(creepSprite, Color.CadetBlue, Color.Black, rotatable: true, priority: .6f));
 
             creep.Add(new Components.Position(x, y, .5f, .75f));

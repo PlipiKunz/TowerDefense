@@ -43,14 +43,14 @@ namespace Systems
                 {
                     if (press && !prevUpgrade)
                     {
-
+                        SelectionSystem.Instance().upgrade();
                     }
                     prevUpgrade = press;
                 }
                 else if (KeyAction == KeyboardActions.Sell)
                 {
                     if (press && !prevSell) { 
-                    
+                        SelectionSystem.Instance().sell();
                     }
                     prevSell = press;
                 }
