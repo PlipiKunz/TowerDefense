@@ -13,10 +13,12 @@ namespace Components
 
         public float CenterX { 
             get { return x + (w / 2); } 
+            set { x = value - (w / 2); }
         }
         public float CenterY
         {
             get { return y + (h / 2); }
+            set { y = value - (h/2); }
         }
         public Position(float x, float y, float w = 1, float h = 1)
         {

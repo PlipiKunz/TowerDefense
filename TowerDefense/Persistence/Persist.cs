@@ -19,7 +19,7 @@ namespace CS5410.Persistence
         static private bool saving = false;
         static private bool loading = false;
 
-        static private string controlsFileName = "Controls2.xml";
+        static private string controlsFileName = "gvgfhuyghvbj.xml";
         static public bool? controlsExists = null;
         static public Dictionary<KeyboardActions, Keys> m_loadedControls = null;
 

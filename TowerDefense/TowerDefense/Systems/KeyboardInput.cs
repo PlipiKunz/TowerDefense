@@ -10,7 +10,8 @@ namespace Systems
     {
         Upgrade,
         Sell,
-        Next
+        Next,
+        Music
     }
 
     /// <summary>
@@ -30,6 +31,9 @@ namespace Systems
         bool prevUpgrade = false;
         bool prevSell = false;
         bool prevNext = false;
+
+        bool prevMus = false;
+        bool musState = true;
         public override void Update(GameTime gameTime)
         {
             foreach (var entry in KeyboardPersistence.actionToKey)
@@ -49,18 +53,35 @@ namespace Systems
                 }
                 else if (KeyAction == KeyboardActions.Sell)
                 {
-                    if (press && !prevSell) { 
+                    if (press && !prevSell)
+                    {
                         SelectionSystem.Instance().sell();
                     }
                     prevSell = press;
                 }
-                else
+                else if (KeyAction == KeyboardActions.Next)
                 {
                     if (press && !prevNext && !LevelSystem.inLevel)
                     {
                         LevelSystem.Instance().nextLevel();
                     }
                     prevNext = press;
+                }
+                else
+                {
+                    if (press && !prevMus )
+                    {
+                        if (musState)
+                        {
+                            Renderer.stop();
+                            musState = false;
+                        }
+                        else { 
+                            Renderer.play();
+                            musState = true;
+                        }
+                    }
+                    prevMus = press;
                 }
 
             }

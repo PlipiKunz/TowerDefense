@@ -45,7 +45,7 @@ namespace Systems
         public uint elapsedWaveInterval;
 
 
-        public const uint SpawnInterval = 500;
+        public const uint SpawnInterval = 600;
         public uint elapsedSpawnInterval;
 
         public uint creepsToSpawn;
@@ -115,8 +115,38 @@ namespace Systems
                     Vector2 startPos = endpoints[0];
                     Vector2 endPos = endpoints[1];
 
-                    var creep = Creeps.createSimpleGround(startPos.X, startPos.Y, endPos, level);
-
+                    Entity creep;
+                    if (level == 1)
+                    {
+                        creep = Creeps.createSimpleGround(startPos.X, startPos.Y, endPos, level);
+                    }
+                    else if (level == 2)
+                    {
+                        if (m_random.nextRange(0, 1) < .5f)
+                        {
+                            creep = Creeps.createSimpleGround(startPos.X, startPos.Y, endPos, level);
+                        }
+                        else
+                        {
+                            creep = Creeps.createFastGround(startPos.X, startPos.Y, endPos, level);
+                        }
+                    }
+                    else
+                    {
+                        var rand = m_random.nextRange(0, 1);
+                        if (rand < .33f)
+                        {
+                            creep = Creeps.createSimpleGround(startPos.X, startPos.Y, endPos, level);
+                        }
+                        else if (rand < .66f)
+                        {
+                            creep = Creeps.createFastGround(startPos.X, startPos.Y, endPos, level);
+                        }
+                        else
+                        {
+                            creep = Creeps.createSimpleFly(startPos.X, startPos.Y, endPos, level);
+                        }
+                    }
                     GameModel.m_addThese.Add(creep);
                     CreepMovement.Instance().upToDate = false;
                 }

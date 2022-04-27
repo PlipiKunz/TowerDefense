@@ -35,7 +35,8 @@ namespace CS5410
 
                     if (m_currentSelection == (int)MenuState.Yes)
                     {
-                        GamePlayView.done();
+
+                    GamePlayView.done();
                         return GameStateEnum.MainMenu;
                     }
                     else if (m_currentSelection == (int)MenuState.No)

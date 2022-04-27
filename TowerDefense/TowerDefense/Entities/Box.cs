@@ -12,9 +12,11 @@ namespace Entities
     public class box
     {
         static Texture2D boxSprite;
+        static Texture2D circle;
         public static void init(ContentManager content)
         {
             boxSprite = content.Load<Texture2D>("Sprites/SquareSprite");
+            circle = content.Load<Texture2D>("Sprites/Circle");
         }
         public static Entity createSimple(float x, float y, bool goalPos)
         {
@@ -29,6 +31,21 @@ namespace Entities
             return box;
         }
 
-        
+        public static Entity createCirc(float x, float y, int w, int h)
+        {
+            var circ = new Entity();
+
+            circ.Add(new Components.Drawable());
+            circ.Add(new Components.Sprite(circle, Color.White, Color.White, .45f));
+
+            circ.Add(new Components.Position(x, y, w, h));
+            var pos = circ.GetComponent<Components.Position>();
+            pos.CenterX = x;
+            pos.CenterY = y;
+
+            return circ;
+        }
+
+
     }
 }

@@ -15,6 +15,7 @@ namespace CS5410
             Upgrade,
             Sell,
             Next,
+            Music,
             Return
         }
 
@@ -56,6 +57,11 @@ namespace CS5410
                     else if (m_currentSelection == (int)MenuState.Next)
                     {
                         curBindingKey = KeyboardActions.Next;
+                        timeSinceBind = bindBufferTimeMS;
+                    }
+                    else if (m_currentSelection == (int)MenuState.Music)
+                    {
+                        curBindingKey = KeyboardActions.Music;
                         timeSinceBind = bindBufferTimeMS;
                     }
                     else if (m_currentSelection == (int)MenuState.Return)
@@ -119,7 +125,9 @@ namespace CS5410
                 bottom = drawSelectedControlMenuItem("Upgrade Selected Component", KeyboardPersistence.actionToKey[KeyboardActions.Upgrade], bottom, m_currentSelection == (int)MenuState.Upgrade);
                 bottom = drawSelectedControlMenuItem("Sell Selected Component", KeyboardPersistence.actionToKey[KeyboardActions.Sell], bottom, m_currentSelection == (int)MenuState.Sell);
                 bottom = drawSelectedControlMenuItem("Start Next Level", KeyboardPersistence.actionToKey[KeyboardActions.Next], bottom, m_currentSelection == (int)MenuState.Next);
-                
+                bottom = drawSelectedControlMenuItem("Toggle Music", KeyboardPersistence.actionToKey[KeyboardActions.Music], bottom, m_currentSelection == (int)MenuState.Music);
+
+
                 bottom = drawSelectedMenuItem("Back", bottom, m_currentSelection == (int)MenuState.Return);
             }
             else

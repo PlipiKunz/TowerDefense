@@ -10,13 +10,17 @@ namespace Entities
     {
         private const float MOVE_AMOUNT = 1f/1000; // in game units to move each millisecond
         private const int STANDARD_COST = 10;
-        private const int STANDARD_HEALTH = 10;
+        private const int STANDARD_HEALTH = 5;
         private const int STANDARD_DAMAGE = 1;
 
-        static Texture2D creepSprite;
+        static Texture2D normalCreep;
+        static Texture2D flyCreep;
+        static Texture2D fastCreep;
         public static void init(ContentManager content)
         {
-            creepSprite = content.Load<Texture2D>("Sprites/SquareSprite");
+            normalCreep = content.Load<Texture2D>("Sprites/NormalCreep");
+            flyCreep = content.Load<Texture2D>("Sprites/FlyingCreep");
+            fastCreep = content.Load<Texture2D>("Sprites/FastCreep");
         }
 
         private static float scale(int level)
@@ -31,9 +35,9 @@ namespace Entities
             var creep = new Entity();
 
             creep.Add(new Components.Drawable());
-            creep.Add(new Components.Sprite(creepSprite, Color.Green, Color.Black, rotatable:true));
+            creep.Add(new Components.AnimatedSprite(normalCreep, 3, 25, Color.White, Color.Black, rotatable:true));
 
-            creep.Add(new Components.Position(x, y, .5f, .75f));
+            creep.Add(new Components.Position(x, y, .75f, .75f));
             creep.Add(new Components.Orientation(90));
              
             creep.Add(new Components.PathMovable(MOVE_AMOUNT * scaleAmount , goal));
@@ -53,9 +57,9 @@ namespace Entities
             var creep = new Entity();
 
             creep.Add(new Components.Drawable());
-            creep.Add(new Components.Sprite(creepSprite, Color.Yellow, Color.Black, rotatable: true));
+            creep.Add(new Components.AnimatedSprite(fastCreep, 3, 25, Color.White, Color.Black, rotatable: true));
 
-            creep.Add(new Components.Position(x, y, .5f, .75f));
+            creep.Add(new Components.Position(x, y, .6f, .6f));
             creep.Add(new Components.Orientation(90));
 
             creep.Add(new Components.PathMovable(MOVE_AMOUNT * scaleAmount * 1.25f, goal));
@@ -74,9 +78,9 @@ namespace Entities
             var creep = new Entity();
 
             creep.Add(new Components.Drawable());
-            creep.Add(new Components.Sprite(creepSprite, Color.CadetBlue, Color.Black, rotatable: true, priority: .6f));
+            creep.Add(new Components.AnimatedSprite(flyCreep, 3, 25, Color.White, Color.Black, rotatable: true));
 
-            creep.Add(new Components.Position(x, y, .5f, .75f));
+            creep.Add(new Components.Position(x, y, .75f, .75f));
             creep.Add(new Components.Orientation(90));
 
             creep.Add(new Components.PathMovable(MOVE_AMOUNT * scaleAmount, goal));

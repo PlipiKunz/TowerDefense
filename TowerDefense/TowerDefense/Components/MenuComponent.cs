@@ -13,7 +13,7 @@ namespace Components
         public string text;
         public towerClass towerClass;
         public Color c;
-        public MenuComponent(SpriteFont sf, string t, Color c, towerClass tc = towerClass.projectile)
+        public MenuComponent(SpriteFont sf, string t, Color c, towerClass tc = towerClass.Projectile)
         {
             font = sf;
             text = t;

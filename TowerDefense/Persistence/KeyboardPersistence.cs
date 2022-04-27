@@ -17,6 +17,7 @@ namespace CS5410.Persistence
             {KeyboardActions.Upgrade, Keys.U },
             {KeyboardActions.Sell, Keys.S },
             {KeyboardActions.Next, Keys.G },
+            {KeyboardActions.Music, Keys.M },
         };
 
 

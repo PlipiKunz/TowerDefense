@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 using CS5410.Persistence;
 using CS5410.TowerDefenseGame;
+using Systems;
 
 namespace CS5410
 {
@@ -60,6 +61,7 @@ namespace CS5410
 
         public static void done()
         {
+            Renderer.stop();
             ScorePersistence.addScore(GameModel.score);
         }
     }

@@ -102,6 +102,7 @@ namespace Systems
 
             if (bulletComponent.type != Components.bulletType.projectile) {
 
+                Renderer.explodeSound.Play(.1f, .1f, .1f); 
                 Renderer.m_explosion_emitter.addExplosion(bullet);
             }
 
@@ -116,6 +117,7 @@ namespace Systems
 
                 if (creepHealth.health <= 0)
                 {
+                    Renderer.squishSound.Play(.5f, .5f, .5f);
                     int creepScore = (int)creep.GetComponent<Components.Cost>().cost;
 
                     GameModel.score += creepScore;

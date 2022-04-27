@@ -94,7 +94,7 @@ namespace Systems
             if (towerComponent.elapsedInterval > towerComponent.fireInterval)
             {
                 var towerPos = tower.GetComponent<Components.Position>();
-
+                Renderer.pewSound.Play(.1f,.1f,.1f);
                 Entity targetCreep = towerComponent.target;
                 if (targetCreep != null)
                 {
